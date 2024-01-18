@@ -1,10 +1,10 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/containerVistaDue"
+    android:id="@+id/containerVistaPrincipale"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.fragment.app.FragmentContainerView android:name="com.unimore.habitodo.vista.VistaDueJava"
-              android:id="@+id/vistaDue"
+    <androidx.fragment.app.FragmentContainerView android:name="com.unimore.habitodo.vista.VistaProva1"
+              android:id="@+id/vistaPrincipale"
               android:layout_width="match_parent"
               android:layout_height="match_parent" />
 

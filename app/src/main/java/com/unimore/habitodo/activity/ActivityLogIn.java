@@ -51,6 +51,7 @@ public class ActivityLogIn extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.d("logMio","risultato lancio activity da ActivityLogIn - codRichiesta :  " + requestCode + " - codRisultato : " + resultCode);
         if(requestCode==Costanti.RC_SIGN_IN && resultCode==RESULT_OK){
             Log.d("logMio","ricevo qualcosa da lanciaIntentLogInGoogle");
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
@@ -86,7 +87,6 @@ public class ActivityLogIn extends AppCompatActivity {
                             firebaseDatabase.getReference().child("users").child(user.getUid()).setValue(map);
 
                             Intent intent = new Intent();
-
 
 
                         }

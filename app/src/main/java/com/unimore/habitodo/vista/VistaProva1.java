@@ -8,13 +8,10 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ProgressBar;
 
-import com.unimore.habitodo.Applicazione;
 import com.unimore.habitodo.R;
 
-public class VistaPrincipale extends Fragment {
+public class VistaProva1 extends Fragment {
 
     //private Bundle bundle;
     //private String nomeBundleContatore = "Contatore";
@@ -23,7 +20,7 @@ public class VistaPrincipale extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View vista = inflater.inflate(R.layout.vista_principale, container, false);
+        View vista = inflater.inflate(R.layout.vista_prova_1, container, false);
         inizializzaVista(vista);
         inizializzaAzioni();
         return vista;

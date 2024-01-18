@@ -9,11 +9,11 @@ import androidx.fragment.app.Fragment;
 
 import com.unimore.habitodo.R;
 
-public class VistaDueJava extends Fragment {
+public class VistaProva2 extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View vista = inflater.inflate(R.layout.vista_due, container, false);
+        View vista = inflater.inflate(R.layout.vista_prova_2, container, false);
         inizializzaVista(vista);
         inizializzaAzioni();
         return vista;

@@ -1,31 +1,21 @@
 package com.unimore.habitodo.activity;
 
-import android.Manifest;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.AlarmClock;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.unimore.habitodo.R;
 
-public class ActivityPrincipale extends AppCompatActivity {
+public class ActivityProva1 extends AppCompatActivity {
 
-    public static final String TAG = ActivityPrincipale.class.getSimpleName();
+    public static final String TAG = ActivityProva1.class.getSimpleName();
     //public static final String permesso = Manifest.permission.READ_CONTACTS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_principale);
+        setContentView(R.layout.activity_prova_1);
         //controlloPermessi();
     }
 

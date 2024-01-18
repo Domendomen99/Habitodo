@@ -1,9 +1,6 @@
 package com.unimore.habitodo.controllo;
 
-import android.view.View;
-import android.widget.Toast;
-
-public class ControlloDue {
+public class ControlloProva2 {
 
     /*
     private View.OnClickListener azioneMostraMessaggio = new AzioneMostraMessaggio();

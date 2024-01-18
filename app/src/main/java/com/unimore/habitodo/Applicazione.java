@@ -4,10 +4,9 @@ import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.unimore.habitodo.controllo.ControlloLogIn;
-import com.unimore.habitodo.controllo.ControlloPrincipale;
+import com.unimore.habitodo.controllo.ControlloProva1;
 import com.unimore.habitodo.modello.Modello;
 
 public class Applicazione extends Application {
@@ -34,14 +33,14 @@ public class Applicazione extends Application {
     }
     private Activity currentActivity = null;
     private Modello modello = new Modello();
-    private ControlloPrincipale controlloPrincipale = new ControlloPrincipale();
+    private ControlloProva1 controlloProva1 = new ControlloProva1();
     private ControlloLogIn controlloLogIn = new ControlloLogIn();
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
 
     public ControlloLogIn getControlloLogIn() {return controlloLogIn;}
-    public ControlloPrincipale getControlloPrincipale() {return controlloPrincipale;}
+    public ControlloProva1 getControlloPrincipale() {return controlloProva1;}
     public Activity getCurrentActivity() {
         return this.currentActivity;
     }

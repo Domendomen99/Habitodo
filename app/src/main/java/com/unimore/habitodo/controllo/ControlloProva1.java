@@ -1,17 +1,6 @@
 package com.unimore.habitodo.controllo;
 
-import android.os.AsyncTask;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ProgressBar;
-
-import com.unimore.habitodo.Applicazione;
-import com.unimore.habitodo.R;
-import com.unimore.habitodo.activity.ActivityPrincipale;
-import com.unimore.habitodo.vista.VistaPrincipale;
-
-public class ControlloPrincipale {
+public class ControlloProva1 {
 
     /*private Button.OnClickListener azioneMostraMessaggio = new AzioneMostraMessaggio();
     private Button.OnClickListener azioneMostraActivityDueSenzaReturn = new AzioneMostraActivityDueSenzaReturn();

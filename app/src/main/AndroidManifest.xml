@@ -22,11 +22,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.unimore.habitodo.activity.ActivityDue"
+            android:name="com.unimore.habitodo.activity.ActivityProva2"
             android:label="@string/app_name" android:exported="true">
         </activity>
         <activity
-            android:name="com.unimore.habitodo.activity.ActivityPrincipale"
+            android:name="com.unimore.habitodo.activity.ActivityProva1"
             android:label="@string/app_name" android:exported="true">
         </activity>
     </application>

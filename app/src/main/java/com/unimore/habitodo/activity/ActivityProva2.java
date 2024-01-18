@@ -1,6 +1,5 @@
 package com.unimore.habitodo.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -8,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.unimore.habitodo.R;
 
-public class ActivityDue extends AppCompatActivity {
+public class ActivityProva2 extends AppCompatActivity {
 
     //public static final String TAG = ActivityDue.class.getSimpleName();
     //private String stringaRicevuta;
@@ -17,7 +16,7 @@ public class ActivityDue extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d("logg","oncreate di activ2");
-        setContentView(R.layout.activity_due);
+        setContentView(R.layout.activity_prova_2);
         Log.d("logg","fine onCreate activity2");
         //Intent intent = this.getIntent();
         //stringaRicevuta = intent.getExtras().getString("Stringa");
