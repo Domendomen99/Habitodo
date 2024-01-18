@@ -1,0 +1,12 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/containerVistaDopoLogIn"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.fragment.app.FragmentContainerView android:name="com.unimore.habitodo.vista.VistaDopoLogIn"
+              android:id="@+id/vistaDopoLogIn"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent" />
+
+
+</FrameLayout>

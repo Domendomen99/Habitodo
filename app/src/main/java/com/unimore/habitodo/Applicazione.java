@@ -5,6 +5,7 @@ import android.app.Application;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.unimore.habitodo.controllo.ControlloDopoLogIn;
 import com.unimore.habitodo.controllo.ControlloLogIn;
 import com.unimore.habitodo.controllo.ControlloProva1;
 import com.unimore.habitodo.modello.Modello;
@@ -35,10 +36,13 @@ public class Applicazione extends Application {
     private Modello modello = new Modello();
     private ControlloProva1 controlloProva1 = new ControlloProva1();
     private ControlloLogIn controlloLogIn = new ControlloLogIn();
+    private ControlloDopoLogIn controlloDopoLogIn = new ControlloDopoLogIn();
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+    public ControlloProva1 getControlloProva1() {return controlloProva1;}
+    public ControlloDopoLogIn getControlloDopoLogIn() {return controlloDopoLogIn;}
     public ControlloLogIn getControlloLogIn() {return controlloLogIn;}
     public ControlloProva1 getControlloPrincipale() {return controlloProva1;}
     public Activity getCurrentActivity() {
