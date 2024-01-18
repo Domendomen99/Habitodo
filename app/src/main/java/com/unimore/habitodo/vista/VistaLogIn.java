@@ -51,6 +51,10 @@ public class VistaLogIn extends Fragment {
         googleSignInClient = GoogleSignIn.getClient(this.getContext(),googleSignInOptions);
         Log.d("logMio","fine di op su googleSignInClient");
         Log.d("logMio","fine metodo autenticazioneFirebase");
+        Applicazione.getInstance().getModello().putBean("firebaseAuth",firebaseAuth);
+        Applicazione.getInstance().getModello().putBean("firebaseDatabase",firebaseDatabase);
+        Applicazione.getInstance().getModello().putBean("googleSignInClient",googleSignInClient);
+        Log.d("logMio","tutte le robe inserite nel modello");
     }
 
     private void inizializzaVista(View vista) {
