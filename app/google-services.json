@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1084849677669",
+    "project_id": "habitodo-ef849",
+    "storage_bucket": "habitodo-ef849.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1084849677669:android:449e6fc5f5f66fbb3aed8c",
+        "android_client_info": {
+          "package_name": "com.unimore.habitodo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1084849677669-uv8o9d7okmnr4t1pn1vndl23204irn6n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.unimore.habitodo",
+            "certificate_hash": "f498a4d87ecf3ffbc9d8148aaeec2ab51b74ea27"
+          }
+        },
+        {
+          "client_id": "1084849677669-uvk0caljl0lqvvlr6faqj30db0o60udk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCexYu-HiGO7HbCA4KtLoj8T_FW1GqVAr4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1084849677669-uvk0caljl0lqvvlr6faqj30db0o60udk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
