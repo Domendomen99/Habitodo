@@ -40,6 +40,16 @@ public class ActivityLogIn extends AppCompatActivity {
         Log.d("logMio","-------------------------------------------");
         setContentView(R.layout.activity_login);
         settingPerAutenticazioneFirebase();
+        FirebaseAuth auth = (FirebaseAuth)Applicazione.getInstance().getModello().getBean("firebaseAuth");
+        if(auth.getCurrentUser()!=null){
+            lanciaIntentActivityDopoLogIn();
+            finish();
+        }
+    }
+
+    private void lanciaIntentActivityDopoLogIn() {
+        Intent intentLanciaActivityDopoLogIn = new Intent(this, ActivityDopoLogIn.class);
+        startActivity(intentLanciaActivityDopoLogIn);
     }
 
     public void mostraMessaggio(){
@@ -121,9 +131,10 @@ public class ActivityLogIn extends AppCompatActivity {
                             firebaseDatabase.getReference().child("users").child(user.getUid()).setValue(map);
                             Log.d("logMio","ottenuta reference da DB");
 
-                            Intent intentLanciaActivityDopoLogIn = new Intent(Applicazione.getInstance().getCurrentActivity(), ActivityDopoLogIn.class);
+                            /*Intent intentLanciaActivityDopoLogIn = new Intent(Applicazione.getInstance().getCurrentActivity(), ActivityDopoLogIn.class);
                             Log.d("logMio","creazione intent per lancio senconda activity");
-                            startActivity(intentLanciaActivityDopoLogIn);
+                            startActivity(intentLanciaActivityDopoLogIn);*/
+                            lanciaIntentActivityDopoLogIn();
                             Log.d("logMio","activityDopoLogInLanciata");
 
                         }else{
