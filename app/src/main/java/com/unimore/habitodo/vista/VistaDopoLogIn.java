@@ -43,11 +43,19 @@ public class VistaDopoLogIn extends Fragment {
         return vista;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("logMio","CurrentActivity in VistaDopoLogIn.onResume : " + Applicazione.getInstance().getCurrentActivity().toString());
+        this.adapterToDo = new AdapterToDo((ActivityDopoLogIn) Applicazione.getInstance().getCurrentActivity());
+    }
+
     private void inizializzaVista(View vista) {
-        Log.d("logMio","CurrentActivity : " + Applicazione.getInstance().toString());
+        Log.d("logMio","CurrentActivity in VistaDopoLogIn.inizializzaVista : " + Applicazione.getInstance().toString());
         this.labelNomeUtente = vista.findViewById(R.id.labelNomeUtente);
         this.listaTask = vista.findViewById(R.id.listaTask);
         this.listaTask.setLayoutManager(new LinearLayoutManager(getContext()));
+        // metodo spostato in onResume in quanto inizializzaVista viene chiamato in oncreate che esegue quando ancora la currentActivity non è ActivityDopoLogIn
         //this.adapterToDo = new AdapterToDo((ActivityDopoLogIn) Applicazione.getInstance().getCurrentActivity());
         FirebaseAuth firebaseAuth = (FirebaseAuth) Applicazione.getInstance().getModello().getBean("firebaseAuth");
         FirebaseUser user = firebaseAuth.getCurrentUser();
