@@ -5,31 +5,27 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.FirebaseDatabase;
 import com.unimore.habitodo.Applicazione;
 import com.unimore.habitodo.R;
 import com.unimore.habitodo.activity.ActivityDopoLogIn;
 import com.unimore.habitodo.adapter.AdapterToDo;
 import com.unimore.habitodo.modello.ModelloToDo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class VistaDopoLogIn extends Fragment {
 
     private TextView labelNomeUtente;
-    private RecyclerView listaTask;
+    private RecyclerView recyclerTask;
     private AdapterToDo adapterToDo;
     private List<ModelloToDo> listaToDo;
 
@@ -48,13 +44,24 @@ public class VistaDopoLogIn extends Fragment {
         super.onResume();
         Log.d("logMio","CurrentActivity in VistaDopoLogIn.onResume : " + Applicazione.getInstance().getCurrentActivity().toString());
         this.adapterToDo = new AdapterToDo((ActivityDopoLogIn) Applicazione.getInstance().getCurrentActivity());
+        /*Log.d("logMio","inizializzazioneAdapterToDo andata a buon fine");
+        recyclerTask.setAdapter(adapterToDo);
+        Log.d("logMio","setAdapter andata a buon fine");
+        ModelloToDo provaToDo = new ModelloToDo(00,0,"provaaaaa");
+        Log.d("logMio","provaToDo creato");
+        listaToDo = new ArrayList<>();
+        Log.d("logMio","listaToDo inizializzata per bene");
+        listaToDo.add(provaToDo);
+        Log.d("logMio","listaToDo.add(provaToDo); andato");
+        adapterToDo.setListaToDo(listaToDo);
+        Log.d("logMio","adapterToDo.setListaToDo(listaToDo); andato");*/
     }
 
     private void inizializzaVista(View vista) {
         Log.d("logMio","CurrentActivity in VistaDopoLogIn.inizializzaVista : " + Applicazione.getInstance().toString());
         this.labelNomeUtente = vista.findViewById(R.id.labelNomeUtente);
-        this.listaTask = vista.findViewById(R.id.listaTask);
-        this.listaTask.setLayoutManager(new LinearLayoutManager(getContext()));
+        this.recyclerTask = vista.findViewById(R.id.listaTask);
+        this.recyclerTask.setLayoutManager(new LinearLayoutManager(getContext()));
         // metodo spostato in onResume in quanto inizializzaVista viene chiamato in oncreate che esegue quando ancora la currentActivity non è ActivityDopoLogIn
         //this.adapterToDo = new AdapterToDo((ActivityDopoLogIn) Applicazione.getInstance().getCurrentActivity());
         FirebaseAuth firebaseAuth = (FirebaseAuth) Applicazione.getInstance().getModello().getBean("firebaseAuth");

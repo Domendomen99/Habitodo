@@ -1,5 +1,6 @@
 package com.unimore.habitodo.adapter;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,11 @@ public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder> {
         this.activityDopoLogIn = activityDopoLogIn;
     }
 
+    public void setListaToDo(List<ModelloToDo> listaToDo) {
+        this.listaToDo = listaToDo;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -34,7 +40,9 @@ public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull AdapterToDo.ViewHolder holder, int position) {
+        Log.d("logMio","listaTodo : " + listaToDo.size() + " : " + listaToDo.toString());
         ModelloToDo toDo = listaToDo.get(position);
+        Log.d("logMio","toDo : " + listaToDo.get(position).getTestoToDo());
         holder.checkBoxListaTask.setText(toDo.getTestoToDo());
         holder.checkBoxListaTask.setChecked(toBoolean(toDo.getStatus()));
     }
