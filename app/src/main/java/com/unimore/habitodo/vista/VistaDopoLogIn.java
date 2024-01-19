@@ -21,11 +21,17 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.unimore.habitodo.Applicazione;
 import com.unimore.habitodo.R;
 import com.unimore.habitodo.activity.ActivityDopoLogIn;
+import com.unimore.habitodo.adapter.AdapterToDo;
+import com.unimore.habitodo.modello.ModelloToDo;
+
+import java.util.List;
 
 public class VistaDopoLogIn extends Fragment {
 
     private TextView labelNomeUtente;
     private RecyclerView listaTask;
+    private AdapterToDo adapterToDo;
+    private List<ModelloToDo> listaToDo;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -42,6 +48,7 @@ public class VistaDopoLogIn extends Fragment {
         this.labelNomeUtente = vista.findViewById(R.id.labelNomeUtente);
         this.listaTask = vista.findViewById(R.id.listaTask);
         this.listaTask.setLayoutManager(new LinearLayoutManager(getContext()));
+        //this.adapterToDo = new AdapterToDo((ActivityDopoLogIn) Applicazione.getInstance().getCurrentActivity());
         FirebaseAuth firebaseAuth = (FirebaseAuth) Applicazione.getInstance().getModello().getBean("firebaseAuth");
         FirebaseUser user = firebaseAuth.getCurrentUser();
         this.labelNomeUtente.setText(user.getEmail());
