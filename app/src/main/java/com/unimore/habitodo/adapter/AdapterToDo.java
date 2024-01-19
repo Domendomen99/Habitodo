@@ -61,6 +61,7 @@ public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder> {
         CheckBox checkBoxListaTask;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            checkBoxListaTask = itemView.findViewById(R.id.checkBoxListaTask);
         }
     }
 }

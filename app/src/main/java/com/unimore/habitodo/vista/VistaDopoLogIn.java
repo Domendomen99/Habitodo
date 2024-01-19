@@ -44,7 +44,7 @@ public class VistaDopoLogIn extends Fragment {
         super.onResume();
         Log.d("logMio","CurrentActivity in VistaDopoLogIn.onResume : " + Applicazione.getInstance().getCurrentActivity().toString());
         this.adapterToDo = new AdapterToDo((ActivityDopoLogIn) Applicazione.getInstance().getCurrentActivity());
-        /*Log.d("logMio","inizializzazioneAdapterToDo andata a buon fine");
+        Log.d("logMio","inizializzazioneAdapterToDo andata a buon fine");
         recyclerTask.setAdapter(adapterToDo);
         Log.d("logMio","setAdapter andata a buon fine");
         ModelloToDo provaToDo = new ModelloToDo(00,0,"provaaaaa");
@@ -54,7 +54,7 @@ public class VistaDopoLogIn extends Fragment {
         listaToDo.add(provaToDo);
         Log.d("logMio","listaToDo.add(provaToDo); andato");
         adapterToDo.setListaToDo(listaToDo);
-        Log.d("logMio","adapterToDo.setListaToDo(listaToDo); andato");*/
+        Log.d("logMio","adapterToDo.setListaToDo(listaToDo); andato");
     }
 
     private void inizializzaVista(View vista) {
