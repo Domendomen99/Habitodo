@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -18,10 +20,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.unimore.habitodo.Applicazione;
 import com.unimore.habitodo.R;
+import com.unimore.habitodo.activity.ActivityDopoLogIn;
 
 public class VistaDopoLogIn extends Fragment {
 
     private TextView labelNomeUtente;
+    private RecyclerView listaTask;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -34,7 +38,10 @@ public class VistaDopoLogIn extends Fragment {
     }
 
     private void inizializzaVista(View vista) {
+        Log.d("logMio","CurrentActivity : " + Applicazione.getInstance().toString());
         this.labelNomeUtente = vista.findViewById(R.id.labelNomeUtente);
+        this.listaTask = vista.findViewById(R.id.listaTask);
+        this.listaTask.setLayoutManager(new LinearLayoutManager(getContext()));
         FirebaseAuth firebaseAuth = (FirebaseAuth) Applicazione.getInstance().getModello().getBean("firebaseAuth");
         FirebaseUser user = firebaseAuth.getCurrentUser();
         this.labelNomeUtente.setText(user.getEmail());

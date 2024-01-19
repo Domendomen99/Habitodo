@@ -78,7 +78,7 @@
             android:src="@android:drawable/ic_input_add"
             app:backgroundTint="#B7D598"
             app:fabSize="auto"
-            app:rippleColor="#000000" />
+            app:rippleColor="#80A559" />
     </LinearLayout>
 
 </LinearLayout>
