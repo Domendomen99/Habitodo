@@ -116,11 +116,15 @@ public class ActivityLogIn extends AppCompatActivity {
                             map.put("id",user.getUid());
                             map.put("name",user.getDisplayName());
                             map.put("profile",user.getPhotoUrl().toString());
+                            Log.d("logMio","fine inserimento dati in db");
 
                             firebaseDatabase.getReference().child("users").child(user.getUid()).setValue(map);
+                            Log.d("logMio","ottenuta reference da DB");
 
-                            Intent intentLanciaActivityDopoLogIn = new Intent(Applicazione.getInstance().getCurrentActivity(), ActivityLogIn.class);
+                            Intent intentLanciaActivityDopoLogIn = new Intent(Applicazione.getInstance().getCurrentActivity(), ActivityDopoLogIn.class);
+                            Log.d("logMio","creazione intent per lancio senconda activity");
                             startActivity(intentLanciaActivityDopoLogIn);
+                            Log.d("logMio","activityDopoLogInLanciata");
 
                         }else{
                             Log.d("logMio","qualcosa nell'inserimento dell'utente nel db è andato storto");

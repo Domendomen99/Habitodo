@@ -22,6 +22,7 @@ public class VistaDopoLogIn extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View vista = inflater.inflate(R.layout.vista_dopo_login, container, false);
+        Log.d("logMio","ingresso in onCreateView di VistaDopoLogIn");
         inizializzaVista(vista);
         inizializzaAzioni();
         Log.d("logMio","fine inizializzazioni vistaDopoLogIn");

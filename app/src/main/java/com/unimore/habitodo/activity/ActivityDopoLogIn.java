@@ -32,6 +32,7 @@ public class ActivityDopoLogIn extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("logMio","ingresso di onCreate di ActivityDopoLogIn");
         setContentView(R.layout.activity_dopo_login);
     }
 
