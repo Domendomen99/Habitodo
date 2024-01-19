@@ -52,7 +52,7 @@ public class ActivityLogIn extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d("logMio","risultato lancio activity da ActivityLogIn - codRichiesta :  " + requestCode + " - codRisultato : " + resultCode);
-        if(requestCode==Costanti.RC_SIGN_IN && resultCode==RESULT_OK){
+        if(requestCode==Costanti.RC_SIGN_IN /*&& resultCode==RESULT_OK*/){
             Log.d("logMio","ricevo qualcosa da lanciaIntentLogInGoogle");
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
@@ -61,12 +61,12 @@ public class ActivityLogIn extends AppCompatActivity {
 
             }catch (Exception e){
                 Log.d("logMio","eccezione in onActivityResult di ActivityLogIn");
-                Log.d("logMio",e.getMessage());
+                Log.d("logMio",e.getMessage() + e.getStackTrace(), e.getCause());
             }
 
-        } else if (requestCode==Costanti.RC_SIGN_IN && resultCode!=RESULT_OK) {
+        } /*else if (requestCode==Costanti.RC_SIGN_IN && resultCode!=RESULT_OK) {
             Log.d("logMio","chiamata activity in lanciaIntentLogInGoogle non ha ritornato correttamente ");
-        }
+        }*/
     }
 
     private void autenticazioneFirebase(String account) {
@@ -86,9 +86,11 @@ public class ActivityLogIn extends AppCompatActivity {
 
                             firebaseDatabase.getReference().child("users").child(user.getUid()).setValue(map);
 
-                            Intent intent = new Intent();
+                            Intent intentLanciaActivityDopoLogIn = new Intent(Applicazione.getInstance().getCurrentActivity(), ActivityLogIn.class);
+                            startActivity(intentLanciaActivityDopoLogIn);
 
-
+                        }else{
+                            Log.d("logMio","qualcosa nell'inserimento dell'utente nel db è andato storto");
                         }
 
                     }
