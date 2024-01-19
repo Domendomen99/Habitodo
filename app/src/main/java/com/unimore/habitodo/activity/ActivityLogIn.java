@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -30,9 +31,14 @@ import java.util.Objects;
 
 public class ActivityLogIn extends AppCompatActivity {
 
+    FirebaseAuth firebaseAuth;
+    FirebaseDatabase firebaseDatabase;
+    GoogleSignInClient googleSignInClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        autenticazioneFirebase();
         setContentView(R.layout.activity_login);
     }
 
@@ -40,9 +46,31 @@ public class ActivityLogIn extends AppCompatActivity {
         Toast.makeText(this, "Ciao", Toast.LENGTH_SHORT).show();
     }
 
+    private void autenticazioneFirebase() {
+        Log.d("logMio","ingresso in metodo autenticazioneFirebase");
+        firebaseAuth = FirebaseAuth.getInstance();
+        Log.d("logMio","FirebaseAuth.getInstance() OK");
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        Log.d("logMio","FirebaseDatabase.getInstance() OK");
+        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken("1084849677669-uv8o9d7okmnr4t1pn1vndl23204irn6n.apps.googleusercontent.com")
+                .requestEmail()
+                .build();
+        Log.d("logMio","fine di op su googleSignInOptions");
+        googleSignInClient = GoogleSignIn.getClient(this,googleSignInOptions);
+        Log.d("logMio","fine di op su googleSignInClient");
+        Log.d("logMio","fine metodo autenticazioneFirebase");
+        Applicazione.getInstance().getModello().putBean("firebaseAuth",firebaseAuth);
+        Applicazione.getInstance().getModello().putBean("firebaseDatabase",firebaseDatabase);
+        Applicazione.getInstance().getModello().putBean("googleSignInClient",googleSignInClient);
+        Log.d("logMio","tutte le robe inserite nel modello");
+    }
+
     public void lanciaIntentLogInGoogle(){
         Log.d("logMio","esecuzione del metodo lanciaIntentLogInGoogle");
         GoogleSignInClient googleSignInClient = (GoogleSignInClient) Applicazione.getInstance().getModello().getBean("googleSignInClient");
+        Log.d("logMio","googleSignInClient : " + googleSignInClient.toString());
+        Log.d("logMio","valore RC_SIGN_IN : " + Costanti.RC_SIGN_IN);
         Log.d("logMio","tutti gli oggetti recuperati da bean");
         Intent intent = googleSignInClient.getSignInIntent();
         startActivityForResult(intent, Costanti.RC_SIGN_IN);
@@ -55,6 +83,7 @@ public class ActivityLogIn extends AppCompatActivity {
         if(requestCode==Costanti.RC_SIGN_IN /*&& resultCode==RESULT_OK*/){
             Log.d("logMio","ricevo qualcosa da lanciaIntentLogInGoogle");
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            Log.d("logMio","Contenuto di data ricevuto da fase di logIn : " + data.getExtras().toString());
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 autenticazioneFirebase(account.getIdToken());

@@ -23,9 +23,7 @@ import com.unimore.habitodo.R;
 public class VistaLogIn extends Fragment {
 
     private Button bottoneLogIn;
-    FirebaseAuth firebaseAuth;
-    FirebaseDatabase firebaseDatabase;
-    GoogleSignInClient googleSignInClient;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,29 +31,10 @@ public class VistaLogIn extends Fragment {
         inizializzaVista(vista);
         inizializzaAzioni();
         Log.d("logMio","fine inizializzazioni vistaLogIn");
-        autenticazioneFirebase();
         return vista;
     }
 
-    private void autenticazioneFirebase() {
-        Log.d("logMio","ingresso in metodo autenticazioneFirebase");
-        firebaseAuth = FirebaseAuth.getInstance();
-        Log.d("logMio","FirebaseAuth.getInstance() OK");
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        Log.d("logMio","FirebaseDatabase.getInstance() OK");
-        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("1084849677669-uv8o9d7okmnr4t1pn1vndl23204irn6n.apps.googleusercontent.com")
-                .requestEmail()
-                .build();
-        Log.d("logMio","fine di op su googleSignInOptions");
-        googleSignInClient = GoogleSignIn.getClient(this.getContext(),googleSignInOptions);
-        Log.d("logMio","fine di op su googleSignInClient");
-        Log.d("logMio","fine metodo autenticazioneFirebase");
-        Applicazione.getInstance().getModello().putBean("firebaseAuth",firebaseAuth);
-        Applicazione.getInstance().getModello().putBean("firebaseDatabase",firebaseDatabase);
-        Applicazione.getInstance().getModello().putBean("googleSignInClient",googleSignInClient);
-        Log.d("logMio","tutte le robe inserite nel modello");
-    }
+
 
     private void inizializzaVista(View vista) {
         this.bottoneLogIn = vista.findViewById(R.id.bottoneLogIn);
