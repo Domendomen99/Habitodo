@@ -72,6 +72,7 @@ public class VistaDopoLogIn extends Fragment {
         FirebaseDatabase firebaseDatabase = (FirebaseDatabase) Applicazione.getInstance().getModello().getBean("firebaseDatabase");
         FirebaseUser user = firebaseAuth.getCurrentUser();
         List<ModelloToDo> toDoList = new ArrayList<>();
+        Log.d("logMio","DATI ottenuti : " + firebaseDatabase.getReference().child("users").get().toString());
         //toDoList = firebaseDatabase.getReference().child("user").child(user.getUid()).child("toDoList").getDatabase();
         return toDoList;
     }
