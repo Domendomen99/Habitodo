@@ -12,6 +12,10 @@ public class ModelloToDo {
         this.testoToDo = testoToDo;
     }
 
+    public ModelloToDo() {
+
+    }
+
     public int getId() {
         return id;
     }
