@@ -14,6 +14,7 @@ import com.unimore.habitodo.R;
 import com.unimore.habitodo.activity.ActivityDopoLogIn;
 import com.unimore.habitodo.modello.ModelloToDo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder> {
@@ -64,4 +65,15 @@ public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder> {
             checkBoxListaTask = itemView.findViewById(R.id.checkBoxListaTask);
         }
     }
+
+    public List<ModelloToDo> getListaToDo() {
+        Log.d("logMio","getListaToDo");
+        if(listaToDo==null){
+            Log.d("logMio","listaTodo non inizializzata -> verrà ritornata una lista vuota");
+            listaToDo = new ArrayList<>();
+        }
+        return listaToDo;
+    }
+
+
 }
