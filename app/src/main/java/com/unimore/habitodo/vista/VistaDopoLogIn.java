@@ -33,7 +33,7 @@ public class VistaDopoLogIn extends Fragment {
     private TextView labelNomeUtente;
     private RecyclerView recyclerTask;
     private AdapterToDo adapterToDo;
-    private List<ModelloToDo> listaToDo = new ArrayList<>();
+    private List<ModelloToDo> listaToDo;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -53,36 +53,19 @@ public class VistaDopoLogIn extends Fragment {
         Log.d("logMio","inizializzazioneAdapterToDo andata a buon fine");
         recyclerTask.setAdapter(adapterToDo);
         Log.d("logMio","setAdapter andata a buon fine");
-
-        // parte della prova fatta dopo
-        //ModelloToDo toDoDiProva = new ModelloToDo(00,0,"provaaaaa");
-        //Log.d("logMio","provaToDo creato");
-
-        //listaToDo = ottieniListaToDoDaFirebaseDB();
-        ottieniListaToDoDaFirebaseDB(listaToDo);
+        inserisciSingoloTaskInFirebaseDB(new ModelloToDo(0,0,"prova"));
+        ottieniListaToDoDaFirebaseDB();
+        inserisciSingoloTaskInFirebaseDB(new ModelloToDo(1,0,"prova"));
         Log.d("logMio","listaToDo inizializzata per bene");
-        Log.d("logMio","listaToDo in OnResume : " + listaToDo.toString());
-
-        // parte della prova fatta dopo
-        //listaToDo.add(toDoDiProva);
-        //Log.d("logMio","listaToDo.add(provaToDo); andato");
+        //Log.d("logMio","listaToDo in OnResume : " + listaToDo.toString());
 
         adapterToDo.setListaToDo(listaToDo);
         Log.d("logMio","adapterToDo.setListaToDo(listaToDo); andato");
 
-        // prova inserimento dati in database legati a utente corrente
-        /*
-        FirebaseAuth firebaseAuth = (FirebaseAuth) Applicazione.getInstance().getModello().getBean("firebaseAuth");
-        FirebaseDatabase firebaseDatabase = (FirebaseDatabase) Applicazione.getInstance().getModello().getBean("firebaseDatabase");
-        String idToDo = Integer.toString(toDoDiProva.getId());
-        firebaseDatabase.getReference().child("users").child(firebaseAuth.getCurrentUser().getUid()).child("toDoList").child(idToDo).setValue(toDoDiProva);
-        */
-        //inserisciSingoloTaskInFirebaseDB(toDoDiProva);
-        //inserisciListaTaskInFirebaseDB(adapterToDo.getListaToDo());
 
     }
 
-    private void ottieniListaToDoDaFirebaseDB(List<ModelloToDo> listaToDo) {
+    private void ottieniListaToDoDaFirebaseDB() {
         FirebaseAuth firebaseAuth = (FirebaseAuth) Applicazione.getInstance().getModello().getBean("firebaseAuth");
         FirebaseDatabase firebaseDatabase = (FirebaseDatabase) Applicazione.getInstance().getModello().getBean("firebaseDatabase");
         FirebaseUser user = firebaseAuth.getCurrentUser();
@@ -91,11 +74,11 @@ public class VistaDopoLogIn extends Fragment {
         Query queryOttieniListaToDoUtente = firebaseDatabase.getReference().child("users").child(user.getUid()).child("toDoList");
         Log.d("logMio","costruzione query andata a buon fine");
         Log.d("logMio","ESECUZIONE QUERY richiesta dati");
-        queryOttieniListaToDoUtente.addListenerForSingleValueEvent(ValueEventListenerOttieniTask(listaToDo));
+        queryOttieniListaToDoUtente.addListenerForSingleValueEvent(ValueEventListenerOttieniTask());
         Log.d("logMio","QUERY andata a buon fine");
     }
 
-    private ValueEventListener ValueEventListenerOttieniTask(List<ModelloToDo> listaToDo) {
+    private ValueEventListener ValueEventListenerOttieniTask() {
         ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -103,16 +86,18 @@ public class VistaDopoLogIn extends Fragment {
                 int id;
                 int status;
                 String testoToDo;
+                ArrayList<ModelloToDo> listaAppoggio = new ArrayList<>();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Log.d("logMio","ottenuto da db : " + snapshot.child(Integer.toString(c)).getValue());
                     id = Integer.parseInt(String.valueOf(snapshot.child(Integer.toString(c)).child("id").getValue()));
                     //Log.d("logMio","id toDo letto : " + id);
                     status = Integer.parseInt(String.valueOf(snapshot.child(Integer.toString(c)).child("status").getValue()));
                     testoToDo = String.valueOf(snapshot.child(Integer.toString(c)).child("testoToDo").getValue());
-                    listaToDo.add(new ModelloToDo(id,status,testoToDo));
+                    listaAppoggio.add(new ModelloToDo(id,status,testoToDo));
                     c++;
                 }
-                Log.d("logMio","listaToDo in ValueEventListener : " + listaToDo.toString());
+                //Log.d("logMio","listaToDo in ValueEventListener : " + listaToDo.toString());
+                listaToDo = listaAppoggio;
                 adapterToDo.setListaToDo(listaToDo);
             }
             @Override
