@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 import com.unimore.habitodo.Applicazione;
 import com.unimore.habitodo.R;
 import com.unimore.habitodo.activity.ActivityDopoLogIn;
@@ -47,14 +48,29 @@ public class VistaDopoLogIn extends Fragment {
         Log.d("logMio","inizializzazioneAdapterToDo andata a buon fine");
         recyclerTask.setAdapter(adapterToDo);
         Log.d("logMio","setAdapter andata a buon fine");
-        ModelloToDo provaToDo = new ModelloToDo(00,0,"provaaaaa");
+        ModelloToDo toDoDiProva = new ModelloToDo(00,0,"provaaaaa");
         Log.d("logMio","provaToDo creato");
         listaToDo = new ArrayList<>();
         Log.d("logMio","listaToDo inizializzata per bene");
-        listaToDo.add(provaToDo);
+        listaToDo.add(toDoDiProva);
         Log.d("logMio","listaToDo.add(provaToDo); andato");
         adapterToDo.setListaToDo(listaToDo);
         Log.d("logMio","adapterToDo.setListaToDo(listaToDo); andato");
+        // prova inserimento dati in database legati a utente corrente
+        /*
+        FirebaseAuth firebaseAuth = (FirebaseAuth) Applicazione.getInstance().getModello().getBean("firebaseAuth");
+        FirebaseDatabase firebaseDatabase = (FirebaseDatabase) Applicazione.getInstance().getModello().getBean("firebaseDatabase");
+        String idToDo = Integer.toString(toDoDiProva.getId());
+        firebaseDatabase.getReference().child("users").child(firebaseAuth.getCurrentUser().getUid()).child("toDoList").child(idToDo).setValue(toDoDiProva);
+        */
+        inserisciTaskInFirebaseDB(toDoDiProva);
+    }
+
+    private void inserisciTaskInFirebaseDB(ModelloToDo toDoDiProva){
+        FirebaseAuth firebaseAuth = (FirebaseAuth) Applicazione.getInstance().getModello().getBean("firebaseAuth");
+        FirebaseDatabase firebaseDatabase = (FirebaseDatabase) Applicazione.getInstance().getModello().getBean("firebaseDatabase");
+        String idToDo = Integer.toString(toDoDiProva.getId());
+        firebaseDatabase.getReference().child("users").child(firebaseAuth.getCurrentUser().getUid()).child("toDoList").child(idToDo).setValue(toDoDiProva);
     }
 
     private void inizializzaVista(View vista) {
