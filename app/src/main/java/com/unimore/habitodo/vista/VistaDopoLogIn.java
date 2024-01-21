@@ -58,8 +58,8 @@ public class VistaDopoLogIn extends Fragment {
         recyclerTask.setAdapter(adapterToDo);
         Log.d("logMio","setAdapter andata a buon fine");
 
-        inserisciSingoloTaskInFirebaseDB(new ModelloToDo(0,0,"prova"));
-        inserisciSingoloTaskInFirebaseDB(new ModelloToDo(1,1,"prova1"));
+        //inserisciSingoloTaskInFirebaseDB(new ModelloToDo(0,0,"prova"));
+        //inserisciSingoloTaskInFirebaseDB(new ModelloToDo(1,1,"prova1"));
 
         ottieniListaToDoDaFirebaseDB();
 
@@ -98,7 +98,7 @@ public class VistaDopoLogIn extends Fragment {
         Query queryOttieniListaToDoUtente = firebaseDatabase.getReference().child("users").child(user.getUid()).child("toDoList");
         Log.d("logMio","costruzione query andata a buon fine");
         Log.d("logMio","ESECUZIONE QUERY richiesta dati");
-        queryOttieniListaToDoUtente.addListenerForSingleValueEvent(ValueEventListenerOttieniTask());
+        queryOttieniListaToDoUtente.addValueEventListener(ValueEventListenerOttieniTask());
         Log.d("logMio","QUERY andata a buon fine");
     }
 
