@@ -58,8 +58,8 @@ public class VistaDopoLogIn extends Fragment {
         recyclerTask.setAdapter(adapterToDo);
         Log.d("logMio","setAdapter andata a buon fine");
 
-        //inserisciSingoloTaskInFirebaseDB(new ModelloToDo(0,0,"prova"));
-        //inserisciSingoloTaskInFirebaseDB(new ModelloToDo(1,1,"prova1"));
+        inserisciSingoloTaskInFirebaseDB(new ModelloToDo(0,0,"prova"));
+        inserisciSingoloTaskInFirebaseDB(new ModelloToDo(1,1,"prova1"));
 
         ottieniListaToDoDaFirebaseDB();
 

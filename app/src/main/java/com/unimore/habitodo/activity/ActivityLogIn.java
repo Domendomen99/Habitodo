@@ -42,6 +42,8 @@ public class ActivityLogIn extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     FirebaseDatabase firebaseDatabase;
     GoogleSignInClient googleSignInClient;
+    boolean isNonRegistrato = true;
+    boolean attendere = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +63,8 @@ public class ActivityLogIn extends AppCompatActivity {
         startActivity(intentLanciaActivityDopoLogIn);
     }
 
-    public void mostraMessaggio(){
-        Toast.makeText(this, "Ciao", Toast.LENGTH_SHORT).show();
+    public void mostraMessaggio(String testo){
+        Toast.makeText(this, testo, Toast.LENGTH_SHORT).show();
     }
 
     private void settingPerAutenticazioneFirebase() {
@@ -134,8 +136,16 @@ public class ActivityLogIn extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
                             // chiamata alla funzione che restituisce true se utente è da aggiungere a db
-                            if(isUtenteNonRegistrato()){
+                            Log.d("logControlloUtente","inizio sezione critica");
 
+                            isUtenteNonRegistrato();
+
+                            /*
+                            Log.d("logControlloUtente","fine attesa");
+
+                            if(isNonRegistrato){
+
+                                Log.d("logControlloUtente","esecuzione codice all'interno dell'if");
                                 // operazioni per aggiungere utente a db
                                 FirebaseUser user = firebaseAuth.getCurrentUser();
                                 HashMap<String, Object> map = new HashMap<>();
@@ -148,20 +158,22 @@ public class ActivityLogIn extends AppCompatActivity {
                                 Log.d("logMio","ottenuta reference da DB");
 
                                 // codice inutile
-                                /*Intent intentLanciaActivityDopoLogIn = new Intent(Applicazione.getInstance().getCurrentActivity(), ActivityDopoLogIn.class);
+                                Intent intentLanciaActivityDopoLogIn = new Intent(Applicazione.getInstance().getCurrentActivity(), ActivityDopoLogIn.class);
                                 Log.d("logMio","creazione intent per lancio senconda activity");
-                                startActivity(intentLanciaActivityDopoLogIn);*/
+                                startActivity(intentLanciaActivityDopoLogIn);
+                                */
+
 
                             }
 
                             // dopo aver inserito utente nuovo se necessario si passa a activity riepilogo task
                             lanciaIntentActivityDopoLogIn();
                             Log.d("logMio","activityDopoLogInLanciata");
-                        }else{
+                        }/*else{
                             Log.d("logMio","qualcosa nell'inserimento dell'utente nel db è andato storto");
-                        }
+                        }*/
 
-                    }
+
                 });
     }
 
@@ -176,7 +188,7 @@ public class ActivityLogIn extends AppCompatActivity {
     }
 
     // funzione che restituisce true se utente è da inserire in db
-    private boolean isUtenteNonRegistrato() {
+    private void isUtenteNonRegistrato() {
         Log.d("logMio","isUtenteNonRegistrato : ingresso in utenteNonRegistrato");
 
         // ottengo tutti riferimenti necessari
@@ -187,9 +199,6 @@ public class ActivityLogIn extends AppCompatActivity {
         // costruisco la query che mi permette di capire se utente è già presente in db
         Query queryOttieniUtenteSePresente = firebaseDatabase.getReference().child("users");
 
-        // variabile appoggio a cui vorrei assegnare il risultato della query
-        boolean isNonRegistrato = true;
-
         // esecuzione della query in handler
         queryOttieniUtenteSePresente.addListenerForSingleValueEvent(ListnerSingleValueEventOttieniUtente(user));
 
@@ -199,24 +208,46 @@ public class ActivityLogIn extends AppCompatActivity {
         }else{
             Log.d("logMio","isUtenteNonRegistrato : utente attualmente registrato");
         }
-        return isNonRegistrato;
     }
 
     // operazioni della query
     private ValueEventListener ListnerSingleValueEventOttieniUtente(FirebaseUser user) {
+        Log.d("logControlloUtente","ottenimento dati da db");
         Log.d("logMio","ListnerSingleValueEventOttieniUtente : ");
         ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String utenteAttuale = user.getUid();
                 for (DataSnapshot dataSnapshot:snapshot.getChildren()) {
+
                     Log.d("logMio","ListnerSingleValueEventOttieniUtente : dato ottenuto da db " + dataSnapshot.getKey());
                     Log.d("logMio","ListnerSingleValueEventOttieniUtente : dato dell'utente attuale " + utenteAttuale);
+
                     if(dataSnapshot.getKey().equals(utenteAttuale)){
+
                         Log.d("logMio","ListnerSingleValueEventOttieniUtente : utente già inserito in db");
+                        Log.d("logControlloUtente","valore isNonRegistrato portato a false");
+
+                        isNonRegistrato=false;
+                        attendere = false;
                     }else{
                         Log.d("logMio","ListnerSingleValueEventOttieniUtente : utente da inserire in db");
                     }
+                }
+
+                if(isNonRegistrato) {
+
+                    Log.d("logControlloUtente", "esecuzione codice all'interno dell'if");
+                    // operazioni per aggiungere utente a db
+                    FirebaseUser user = firebaseAuth.getCurrentUser();
+                    HashMap<String, Object> map = new HashMap<>();
+                    map.put("id", user.getUid());
+                    map.put("name", user.getDisplayName());
+                    map.put("profile", user.getPhotoUrl().toString());
+                    Log.d("logMio", "fine inserimento dati in db");
+
+                    firebaseDatabase.getReference().child("users").child(user.getUid()).setValue(map);
+                    Log.d("logMio", "ottenuta reference da DB");
                 }
 
             }
