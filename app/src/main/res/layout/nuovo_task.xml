@@ -35,7 +35,7 @@
             android:background="#00FFFFFF"
             android:text="Add"
             android:textAllCaps="false"
-            android:textColor="#666666"
+            android:textColor="#57955C"
             android:textSize="16sp" />
     </LinearLayout>
 
