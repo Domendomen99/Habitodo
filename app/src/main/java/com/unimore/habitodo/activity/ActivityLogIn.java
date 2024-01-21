@@ -21,7 +21,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.unimore.habitodo.Applicazione;
 import com.unimore.habitodo.Costanti;
 import com.unimore.habitodo.R;
@@ -121,27 +125,87 @@ public class ActivityLogIn extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-                            FirebaseUser user = firebaseAuth.getCurrentUser();
-                            HashMap<String, Object> map = new HashMap<>();
-                            map.put("id",user.getUid());
-                            map.put("name",user.getDisplayName());
-                            map.put("profile",user.getPhotoUrl().toString());
-                            Log.d("logMio","fine inserimento dati in db");
+                            // chiamata alla funzione che restituisce true se utente è da aggiungere a db
+                            if(isUtenteNonRegistrato()){
 
-                            firebaseDatabase.getReference().child("users").child(user.getUid()).setValue(map);
-                            Log.d("logMio","ottenuta reference da DB");
+                                // operazioni per aggiungere utente a db
+                                FirebaseUser user = firebaseAuth.getCurrentUser();
+                                HashMap<String, Object> map = new HashMap<>();
+                                map.put("id",user.getUid());
+                                map.put("name",user.getDisplayName());
+                                map.put("profile",user.getPhotoUrl().toString());
+                                Log.d("logMio","fine inserimento dati in db");
 
-                            /*Intent intentLanciaActivityDopoLogIn = new Intent(Applicazione.getInstance().getCurrentActivity(), ActivityDopoLogIn.class);
-                            Log.d("logMio","creazione intent per lancio senconda activity");
-                            startActivity(intentLanciaActivityDopoLogIn);*/
+                                firebaseDatabase.getReference().child("users").child(user.getUid()).setValue(map);
+                                Log.d("logMio","ottenuta reference da DB");
+
+                                // codice inutile
+                                /*Intent intentLanciaActivityDopoLogIn = new Intent(Applicazione.getInstance().getCurrentActivity(), ActivityDopoLogIn.class);
+                                Log.d("logMio","creazione intent per lancio senconda activity");
+                                startActivity(intentLanciaActivityDopoLogIn);*/
+
+                            }
+
+                            // dopo aver inserito utente nuovo se necessario si passa a activity riepilogo task
                             lanciaIntentActivityDopoLogIn();
                             Log.d("logMio","activityDopoLogInLanciata");
-
                         }else{
                             Log.d("logMio","qualcosa nell'inserimento dell'utente nel db è andato storto");
                         }
 
                     }
                 });
+    }
+
+    // funzione che restituisce true se utente è da inserire in db
+    private boolean isUtenteNonRegistrato() {
+        Log.d("logMio","isUtenteNonRegistrato : ingresso in utenteNonRegistrato");
+
+        // ottengo tutti riferimenti necessari
+        FirebaseAuth firebaseAuth = (FirebaseAuth) Applicazione.getInstance().getModello().getBean("firebaseAuth");
+        FirebaseDatabase firebaseDatabase = (FirebaseDatabase) Applicazione.getInstance().getModello().getBean("firebaseDatabase");
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+
+        // costruisco la query che mi permette di capire se utente è già presente in db
+        Query queryOttieniUtenteSePresente = firebaseDatabase.getReference().child("users");
+
+        // variabile appoggio a cui vorrei assegnare il risultato della query
+        boolean isNonRegistrato = true;
+
+        // esecuzione della query in handler
+        queryOttieniUtenteSePresente.addListenerForSingleValueEvent(ListnerSingleValueEventOttieniUtente(user));
+
+        // controllo di isNonRegistrato
+        if(isNonRegistrato){
+            Log.d("logMio","isUtenteNonRegistrato : utente non registrato");
+        }else{
+            Log.d("logMio","isUtenteNonRegistrato : utente attualmente registrato");
+        }
+        return isNonRegistrato;
+    }
+
+    // operazioni della query
+    private ValueEventListener ListnerSingleValueEventOttieniUtente(FirebaseUser user) {
+        Log.d("logMio","ListnerSingleValueEventOttieniUtente : ");
+        ValueEventListener valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String utenteAttuale = user.getUid();
+                for (DataSnapshot dataSnapshot:snapshot.getChildren()) {
+                    Log.d("logMio","ListnerSingleValueEventOttieniUtente : dato ottenuto da db " + dataSnapshot.getKey());
+                    Log.d("logMio","ListnerSingleValueEventOttieniUtente : dato dell'utente attuale " + utenteAttuale);
+                    if(dataSnapshot.getKey().equals(utenteAttuale)){
+                        Log.d("logMio","ListnerSingleValueEventOttieniUtente : utente già inserito in db");
+                    }else{
+                        Log.d("logMio","ListnerSingleValueEventOttieniUtente : utente da inserire in db");
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        };
+        return valueEventListener;
     }
 }

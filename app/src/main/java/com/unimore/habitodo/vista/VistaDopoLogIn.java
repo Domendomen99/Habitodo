@@ -22,10 +22,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.unimore.habitodo.Applicazione;
 import com.unimore.habitodo.R;
 import com.unimore.habitodo.activity.ActivityDopoLogIn;
+import com.unimore.habitodo.activity.ActivityLogIn;
 import com.unimore.habitodo.adapter.AdapterToDo;
 import com.unimore.habitodo.modello.ModelloToDo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class VistaDopoLogIn extends Fragment {
@@ -49,13 +51,20 @@ public class VistaDopoLogIn extends Fragment {
     public void onResume() {
         super.onResume();
         Log.d("logMio","CurrentActivity in VistaDopoLogIn.onResume : " + Applicazione.getInstance().getCurrentActivity().toString());
+
         this.adapterToDo = new AdapterToDo((ActivityDopoLogIn) Applicazione.getInstance().getCurrentActivity());
         Log.d("logMio","inizializzazioneAdapterToDo andata a buon fine");
+
         recyclerTask.setAdapter(adapterToDo);
         Log.d("logMio","setAdapter andata a buon fine");
-        inserisciSingoloTaskInFirebaseDB(new ModelloToDo(0,0,"prova"));
+
+        //inserisciSingoloTaskInFirebaseDB(new ModelloToDo(0,0,"prova"));
+        //inserisciSingoloTaskInFirebaseDB(new ModelloToDo(1,1,"prova1"));
+
         ottieniListaToDoDaFirebaseDB();
-        inserisciSingoloTaskInFirebaseDB(new ModelloToDo(1,0,"prova"));
+
+        // codice per capire come funziona inserimento utente
+        //provaPutUtente();
         Log.d("logMio","listaToDo inizializzata per bene");
         //Log.d("logMio","listaToDo in OnResume : " + listaToDo.toString());
 
@@ -64,6 +73,21 @@ public class VistaDopoLogIn extends Fragment {
 
 
     }
+
+    // codice utile in debugging
+    // RISULTATO : ogni volta che accedo a app viene sovrascritto utente attuale e tutti i dati collegati vengono eliminati
+    // SOLUZIONE : fare controllo durante login e evitare di reinserire utente quando già presente
+    private void provaPutUtente() {
+        FirebaseAuth firebaseAuth = (FirebaseAuth) Applicazione.getInstance().getModello().getBean("firebaseAuth");
+        FirebaseDatabase firebaseDatabase = (FirebaseDatabase) Applicazione.getInstance().getModello().getBean("firebaseDatabase");
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("id",user.getUid());
+        map.put("name",user.getDisplayName());
+        map.put("profile",user.getPhotoUrl().toString());
+        firebaseDatabase.getReference().child("users").child(user.getUid()).setValue(map);
+    }
+
 
     private void ottieniListaToDoDaFirebaseDB() {
         FirebaseAuth firebaseAuth = (FirebaseAuth) Applicazione.getInstance().getModello().getBean("firebaseAuth");
