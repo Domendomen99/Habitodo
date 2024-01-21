@@ -3,6 +3,10 @@ package com.unimore.habitodo.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.Transformation;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,6 +33,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.unimore.habitodo.Applicazione;
 import com.unimore.habitodo.Costanti;
 import com.unimore.habitodo.R;
+import com.unimore.habitodo.vista.VistaLogIn;
 
 import java.util.HashMap;
 
@@ -119,6 +124,9 @@ public class ActivityLogIn extends AppCompatActivity {
         Log.d("logMio","ottenimento credenziali");
         FirebaseAuth firebaseAuth = (FirebaseAuth) Applicazione.getInstance().getModello().getBean("firebaseAuth");
         FirebaseDatabase firebaseDatabase = (FirebaseDatabase) Applicazione.getInstance().getModello().getBean("firebaseDatabase");
+
+        visualizzaCaricamento();
+
         Log.d("logMio","oggetti firebaseAuth e firebaseDatabase recuperati da bean");
         firebaseAuth.signInWithCredential(credenziali)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -155,6 +163,16 @@ public class ActivityLogIn extends AppCompatActivity {
 
                     }
                 });
+    }
+
+    private void visualizzaCaricamento() {
+        // gestione animazione durante caricamento
+        VistaLogIn vistaLogIn = this.getVistaLogIn();
+        ProgressBar progressBar = vistaLogIn.getProgressBar();
+        progressBar.setVisibility(View.VISIBLE);
+        ProgressBarAnimation anim = new ProgressBarAnimation(progressBar, 0, 100);
+        anim.setDuration(1000);
+        progressBar.startAnimation(anim);
     }
 
     // funzione che restituisce true se utente è da inserire in db
@@ -207,5 +225,32 @@ public class ActivityLogIn extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {}
         };
         return valueEventListener;
+    }
+
+    public VistaLogIn getVistaLogIn(){
+        return (VistaLogIn) getSupportFragmentManager().findFragmentById(R.id.vistaLogIn);
+    }
+
+
+    // codice copiato
+    public class ProgressBarAnimation extends Animation {
+        private ProgressBar progressBar;
+        private float from;
+        private float  to;
+
+        public ProgressBarAnimation(ProgressBar progressBar, float from, float to) {
+            super();
+            this.progressBar = progressBar;
+            this.from = from;
+            this.to = to;
+        }
+
+        @Override
+        protected void applyTransformation(float interpolatedTime, Transformation t) {
+            super.applyTransformation(interpolatedTime, t);
+            float value = from + (to - from) * interpolatedTime;
+            progressBar.setProgress((int) value);
+        }
+
     }
 }

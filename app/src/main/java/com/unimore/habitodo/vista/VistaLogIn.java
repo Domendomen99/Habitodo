@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,6 +24,7 @@ import com.unimore.habitodo.R;
 public class VistaLogIn extends Fragment {
 
     private Button bottoneLogIn;
+    private ProgressBar progressBar;
 
 
     @Override
@@ -35,9 +37,13 @@ public class VistaLogIn extends Fragment {
     }
 
 
+    public ProgressBar getProgressBar() {
+        return progressBar;
+    }
 
     private void inizializzaVista(View vista) {
         this.bottoneLogIn = vista.findViewById(R.id.bottoneLogIn);
+        this.progressBar = vista.findViewById(R.id.progressBar);
     }
 
     private void inizializzaAzioni() {
