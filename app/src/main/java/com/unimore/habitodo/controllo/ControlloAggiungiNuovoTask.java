@@ -27,8 +27,16 @@ public class ControlloAggiungiNuovoTask {
         public void onClick(View view) {
             Log.d("logMio","Inizio azione AzioneAggiungiNuovoTask");
             String testoNuovoTask = (String) Applicazione.getInstance().getModello().getBean("testoNuovoTask");
-            int numeroTask = (int) Applicazione.getInstance().getModello().getBean("numeroTaskAttuale");
+            int numeroTask;
+            if(Applicazione.getInstance().getModello().getBean("ultimoID")==null){
+                numeroTask = 0;
+            }else{
+                numeroTask = (int) Applicazione.getInstance().getModello().getBean("ultimoID");
+            }
+            Log.d("logMio","numero task prima : " + numeroTask);
             int idNuovoTask = numeroTask+1;
+            Log.d("logMio","numero task dopo : " + idNuovoTask);
+            //Applicazione.getInstance().getModello().putBean("numeroTaskAttuale",idNuovoTask);
             int statusNuovoTask = 0;
             Log.d("logMio","AzioneAggiungiNuovoTask : dati nuovo task ottenuti");
             inserisciSingoloTaskInFirebaseDB(new ModelloToDo(idNuovoTask,statusNuovoTask,testoNuovoTask));

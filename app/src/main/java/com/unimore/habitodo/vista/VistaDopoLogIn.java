@@ -126,6 +126,7 @@ public class VistaDopoLogIn extends Fragment {
                     status = Integer.parseInt(String.valueOf(dataSnapshot.child("status").getValue()));
                     testoToDo = String.valueOf(dataSnapshot.child("testoToDo").getValue());
                     listaAppoggio.add(new ModelloToDo(id,status,testoToDo));
+                    Applicazione.getInstance().getModello().putBean("ultimoID",id);
 
 
                     // versione vecchia che da problemi con rimozione in testa
