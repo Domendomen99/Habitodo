@@ -5,6 +5,7 @@ import android.app.Application;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.unimore.habitodo.controllo.ControlloAdapterToDo;
 import com.unimore.habitodo.controllo.ControlloAggiungiNuovoTask;
 import com.unimore.habitodo.controllo.ControlloDopoLogIn;
 import com.unimore.habitodo.controllo.ControlloLogIn;
@@ -37,9 +38,14 @@ public class Applicazione extends Application {
     private ControlloLogIn controlloLogIn = new ControlloLogIn();
     private ControlloDopoLogIn controlloDopoLogIn = new ControlloDopoLogIn();
     private ControlloAggiungiNuovoTask controlloAggiungiNuovoTask = new ControlloAggiungiNuovoTask();
+    private ControlloAdapterToDo controlloAdapterToDo = new ControlloAdapterToDo();
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+    public ControlloAdapterToDo getControlloAdapterToDo() {
+        return controlloAdapterToDo;
+    }
     public ControlloAggiungiNuovoTask getControlloAggiungiNuovoTask(){return controlloAggiungiNuovoTask;}
     public ControlloProva1 getControlloProva1() {return controlloProva1;}
     public ControlloDopoLogIn getControlloDopoLogIn() {return controlloDopoLogIn;}

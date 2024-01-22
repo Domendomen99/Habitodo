@@ -24,6 +24,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.unimore.habitodo.Applicazione;
 import com.unimore.habitodo.Costanti;
 import com.unimore.habitodo.R;
+import com.unimore.habitodo.vista.VistaDopoLogIn;
+import com.unimore.habitodo.vista.VistaLogIn;
 
 import java.util.HashMap;
 
@@ -38,6 +40,10 @@ public class ActivityDopoLogIn extends AppCompatActivity {
 
     public void mostraMessaggio(){
         Toast.makeText(this, "Ciao", Toast.LENGTH_SHORT).show();
+    }
+
+    public VistaDopoLogIn getVistaDopoLogIn(){
+        return (VistaDopoLogIn) getSupportFragmentManager().findFragmentById(R.id.vistaDopoLogIn);
     }
 
 

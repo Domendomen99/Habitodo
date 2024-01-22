@@ -169,4 +169,7 @@ public class VistaDopoLogIn extends Fragment {
         bottoneAggiungiTask.setOnClickListener(Applicazione.getInstance().getControlloDopoLogIn().getAzioneMostraActivityAggiungiNuovoTask());
     }
 
+    public AdapterToDo getAdapterToDo() {
+        return adapterToDo;
+    }
 }
