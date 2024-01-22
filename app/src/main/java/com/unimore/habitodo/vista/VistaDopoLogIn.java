@@ -71,6 +71,7 @@ public class VistaDopoLogIn extends Fragment {
         //Log.d("logMio","listaToDo in OnResume : " + listaToDo.toString());
 
         adapterToDo.setListaToDo(listaToDo);
+
         Log.d("logMio","adapterToDo.setListaToDo(listaToDo); andato");
 
 

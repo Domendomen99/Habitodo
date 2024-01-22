@@ -8,17 +8,40 @@
     app:cardCornerRadius="8dp"
     app:cardElevation="4dp">
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="8dp">
 
-        <CheckBox
-            android:id="@+id/checkBoxListaTask"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:buttonTint="#B6D497"
-            android:paddingStart="8dp"
-            android:text="taskText" />
-    </RelativeLayout>
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/checkBoxListaTask"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:buttonTint="#B6D497"
+                android:paddingStart="8dp"
+                android:text="taskText" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="right"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/bottoneEliminaTask"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#00FFFFFF"
+                android:src="@android:drawable/ic_menu_delete"
+                android:tint="#57955C" />
+        </LinearLayout>
+
+    </LinearLayout>
 </androidx.cardview.widget.CardView>
