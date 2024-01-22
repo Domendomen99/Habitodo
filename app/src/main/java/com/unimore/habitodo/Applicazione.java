@@ -10,6 +10,7 @@ import com.unimore.habitodo.controllo.ControlloAggiungiNuovoTask;
 import com.unimore.habitodo.controllo.ControlloDopoLogIn;
 import com.unimore.habitodo.controllo.ControlloLogIn;
 import com.unimore.habitodo.controllo.ControlloProva1;
+import com.unimore.habitodo.modello.ServizioNotifiche;
 import com.unimore.habitodo.modello.Modello;
 
 public class Applicazione extends Application {
@@ -39,10 +40,12 @@ public class Applicazione extends Application {
     private ControlloDopoLogIn controlloDopoLogIn = new ControlloDopoLogIn();
     private ControlloAggiungiNuovoTask controlloAggiungiNuovoTask = new ControlloAggiungiNuovoTask();
     private ControlloAdapterToDo controlloAdapterToDo = new ControlloAdapterToDo();
+    private ServizioNotifiche servizioNotifiche = new ServizioNotifiche();
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+    public ServizioNotifiche getServizioNotifiche() {return servizioNotifiche;}
     public ControlloAdapterToDo getControlloAdapterToDo() {
         return controlloAdapterToDo;
     }

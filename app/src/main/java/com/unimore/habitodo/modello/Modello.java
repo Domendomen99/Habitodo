@@ -15,4 +15,7 @@ public class Modello {
         return this.mappaBean.get(nome);
     }
 
+    public Map<String, Object> getMappaBean() {
+        return mappaBean;
+    }
 }

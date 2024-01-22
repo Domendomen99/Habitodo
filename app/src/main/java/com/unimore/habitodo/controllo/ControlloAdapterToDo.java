@@ -2,12 +2,10 @@ package com.unimore.habitodo.controllo;
 
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageButton;
 
 import com.unimore.habitodo.Applicazione;
 import com.unimore.habitodo.activity.ActivityDopoLogIn;
-import com.unimore.habitodo.activity.ActivityLogIn;
-import com.unimore.habitodo.adapter.AdapterToDo;
+import com.unimore.habitodo.modello.AdapterToDo;
 import com.unimore.habitodo.vista.VistaDopoLogIn;
 
 public class ControlloAdapterToDo {

@@ -1,5 +1,11 @@
 package com.unimore.habitodo.vista;
 
+import static android.content.Context.JOB_SCHEDULER_SERVICE;
+
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,9 +29,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.unimore.habitodo.Applicazione;
 import com.unimore.habitodo.R;
 import com.unimore.habitodo.activity.ActivityDopoLogIn;
-import com.unimore.habitodo.activity.ActivityLogIn;
-import com.unimore.habitodo.adapter.AdapterToDo;
+import com.unimore.habitodo.modello.AdapterToDo;
 import com.unimore.habitodo.modello.ModelloToDo;
+import com.unimore.habitodo.modello.ServizioNotifiche;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -145,6 +151,9 @@ public class VistaDopoLogIn extends Fragment {
                 adapterToDo.setListaToDo(listaToDo);
                 Log.d("logMio","dimensione lista TODO : " + listaToDo.size());
                 Applicazione.getInstance().getModello().putBean("numeroTaskAttuale",listaToDo.size());
+                Applicazione.getInstance().getModello().putBean("listaToDo",listaToDo);
+                Log.d("contenutoModello","MODELLO : " + Applicazione.getInstance().getModello().getMappaBean().keySet());
+                //programmaInvioNotifiche();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
@@ -190,4 +199,28 @@ public class VistaDopoLogIn extends Fragment {
     public AdapterToDo getAdapterToDo() {
         return adapterToDo;
     }
+
+    public void programmaInvioNotifiche(){
+        ComponentName componentName = new ComponentName(getContext(),ServizioNotifiche.class);
+        JobInfo jobInfo = new JobInfo.Builder(123,componentName)
+                .setPersisted(true)
+                .setPeriodic(10000)
+                .build();
+
+        ActivityDopoLogIn activityDopoLogIn = (ActivityDopoLogIn) Applicazione.getInstance().getCurrentActivity();
+        JobScheduler scheduler = (JobScheduler) activityDopoLogIn.getSystemService(JOB_SCHEDULER_SERVICE);
+        int resultCode = scheduler.schedule(jobInfo);
+        if(resultCode==JobScheduler.RESULT_SUCCESS){
+            Log.d("logNot","job schedulato con successo");
+        }else{
+            Log.d("logNot","job non schedulato");
+        }
+    }
+
+    public void cancellaInvioNotidiche(){
+        ActivityDopoLogIn activityDopoLogIn = (ActivityDopoLogIn) Applicazione.getInstance().getCurrentActivity();
+        JobScheduler scheduler = (JobScheduler) activityDopoLogIn.getSystemService(JOB_SCHEDULER_SERVICE);
+        scheduler.cancel(123);
+    }
+
 }

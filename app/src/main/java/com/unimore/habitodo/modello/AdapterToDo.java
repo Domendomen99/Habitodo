@@ -1,4 +1,4 @@
-package com.unimore.habitodo.adapter;
+package com.unimore.habitodo.modello;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,7 +17,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.unimore.habitodo.Applicazione;
 import com.unimore.habitodo.R;
 import com.unimore.habitodo.activity.ActivityDopoLogIn;
-import com.unimore.habitodo.modello.ModelloToDo;
 import com.unimore.habitodo.vista.VistaDopoLogIn;
 
 import java.util.ArrayList;
