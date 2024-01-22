@@ -1,5 +1,8 @@
 package com.unimore.habitodo.activity;
 
+import android.app.Activity;
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,6 +15,7 @@ import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.auth.FirebaseAuth;
@@ -51,30 +55,48 @@ public class ActivityAggiungiNuovoTask extends BottomSheetDialogFragment {
         FirebaseAuth firebaseAuth = (FirebaseAuth) Applicazione.getInstance().getModello().getBean("firebaseAuth");
     }
 
-    private void inizializzaAzioni() {
-        bottoneAggiungiTask.addTextChangedListener(new GestoreTesto());
-    }
-
     private void inizializzaVista(View view) {
         campoTestoNuovoTask = view.findViewById(R.id.campoTestoNuovoTask);
         bottoneAggiungiTask = view.findViewById(R.id.bottoneInserisciNuovoTask);
-        bottoneAggiungiTask.setActivated(false);
+        bottoneAggiungiTask.setEnabled(false);
     }
 
-    private class GestoreTesto implements TextWatcher {
-        @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+    private void inizializzaAzioni() {
+        campoTestoNuovoTask.addTextChangedListener(new ListnerTestoNuovoTask());
+        bottoneAggiungiTask.setOnClickListener(Applicazione.getInstance().getControlloAggiungiNuovoTask().getAzioneAggiungiNuovoTask());
+    }
 
-        }
+    private class ListnerTestoNuovoTask implements TextWatcher {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+            if(charSequence.toString().equals("")){
+                bottoneAggiungiTask.setEnabled(false);
+                bottoneAggiungiTask.setTextColor(Color.GRAY);
+            }else{
+                bottoneAggiungiTask.setEnabled(true);
+                bottoneAggiungiTask.setTextColor(ContextCompat.getColor(getContext(), com.google.android.material.R.color.design_default_color_primary_dark));
+                Applicazione.getInstance().getModello().putBean("testoNuovoTask",campoTestoNuovoTask.getText().toString());
+            }
         }
 
         @Override
-        public void afterTextChanged(Editable editable) {
+        public void afterTextChanged(Editable editable) {}
+
+    }
+
+    public String getTestoCampoTestoNuovoTask(){
+        return campoTestoNuovoTask.getText().toString();
+    }
+
+    /*@Override
+    public void onDismiss(@NonNull DialogInterface dialog) {
+        super.onDismiss(dialog);
+        Activity activity = getActivity();
+        if(activity instanceof DialogCloseListener){
 
         }
-    }
+    }*/
 }

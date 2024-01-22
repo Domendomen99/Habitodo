@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -36,6 +37,7 @@ public class VistaDopoLogIn extends Fragment {
     private RecyclerView recyclerTask;
     private AdapterToDo adapterToDo;
     private List<ModelloToDo> listaToDo;
+    private FloatingActionButton bottoneAggiungiTask;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -123,6 +125,8 @@ public class VistaDopoLogIn extends Fragment {
                 //Log.d("logMio","listaToDo in ValueEventListener : " + listaToDo.toString());
                 listaToDo = listaAppoggio;
                 adapterToDo.setListaToDo(listaToDo);
+                Log.d("logMio","dimensione lista TODO : " + listaToDo.size());
+                Applicazione.getInstance().getModello().putBean("numeroTaskAttuale",listaToDo.size());
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
@@ -152,6 +156,7 @@ public class VistaDopoLogIn extends Fragment {
         this.labelNomeUtente = vista.findViewById(R.id.labelNomeUtente);
         this.recyclerTask = vista.findViewById(R.id.listaTask);
         this.recyclerTask.setLayoutManager(new LinearLayoutManager(getContext()));
+        this.bottoneAggiungiTask = vista.findViewById(R.id.bottoneAggiungiTask);
         // metodo spostato in onResume in quanto inizializzaVista viene chiamato in oncreate che esegue quando ancora la currentActivity non è ActivityDopoLogIn
         //this.adapterToDo = new AdapterToDo((ActivityDopoLogIn) Applicazione.getInstance().getCurrentActivity());
         FirebaseAuth firebaseAuth = (FirebaseAuth) Applicazione.getInstance().getModello().getBean("firebaseAuth");
@@ -160,7 +165,7 @@ public class VistaDopoLogIn extends Fragment {
     }
 
     private void inizializzaAzioni() {
-
+        bottoneAggiungiTask.setOnClickListener(Applicazione.getInstance().getControlloDopoLogIn().getAzioneMostraActivityAggiungiNuovoTask());
     }
 
 }
