@@ -5,10 +5,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 import com.unimore.habitodo.Applicazione;
 import com.unimore.habitodo.R;
 import com.unimore.habitodo.activity.ActivityDopoLogIn;
@@ -76,6 +80,15 @@ public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder> {
             listaToDo = new ArrayList<>();
         }
         return listaToDo;
+    }
+
+    public void eliminaTask(int posizione){
+        ModelloToDo toDo = listaToDo.get(posizione);
+        FirebaseDatabase firebaseDatabase = (FirebaseDatabase) Applicazione.getInstance().getModello().getBean("firebaseDatabase");
+        FirebaseAuth firebaseAuth = (FirebaseAuth) Applicazione.getInstance().getModello().getBean("firebaseAuth");
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        firebaseDatabase.getReference().child(user.getUid()).child("toDoList").child(String.valueOf(toDo.getId())).removeValue();
+        Toast.makeText(activityDopoLogIn, "task eliminato", Toast.LENGTH_SHORT).show();
     }
 
 

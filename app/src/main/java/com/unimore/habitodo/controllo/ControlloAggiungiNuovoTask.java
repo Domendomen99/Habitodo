@@ -3,6 +3,7 @@ package com.unimore.habitodo.controllo;
 import android.app.Activity;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
@@ -25,7 +26,6 @@ public class ControlloAggiungiNuovoTask {
         @Override
         public void onClick(View view) {
             Log.d("logMio","Inizio azione AzioneAggiungiNuovoTask");
-            Activity activityAggiungiNuovoTask = Applicazione.getInstance().getCurrentActivity();
             String testoNuovoTask = (String) Applicazione.getInstance().getModello().getBean("testoNuovoTask");
             int numeroTask = (int) Applicazione.getInstance().getModello().getBean("numeroTaskAttuale");
             int idNuovoTask = numeroTask;
@@ -33,6 +33,8 @@ public class ControlloAggiungiNuovoTask {
             Log.d("logMio","AzioneAggiungiNuovoTask : dati nuovo task ottenuti");
             inserisciSingoloTaskInFirebaseDB(new ModelloToDo(numeroTask,statusNuovoTask,testoNuovoTask));
             Log.d("logMio","AzioneAggiungiNuovoTask : chiamata a funzone inserisciSingoloTaskInFirebaseDB fatta");
+            EditText campoTestoNuovoTask = (EditText) Applicazione.getInstance().getModello().getBean("campoTestoNuovoTask");
+            campoTestoNuovoTask.setText("");
         }
     }
 

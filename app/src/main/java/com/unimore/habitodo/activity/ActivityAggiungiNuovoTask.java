@@ -22,6 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.unimore.habitodo.Applicazione;
 import com.unimore.habitodo.R;
+import com.unimore.habitodo.vista.VistaLogIn;
 
 public class ActivityAggiungiNuovoTask extends BottomSheetDialogFragment {
 
@@ -59,6 +60,7 @@ public class ActivityAggiungiNuovoTask extends BottomSheetDialogFragment {
         campoTestoNuovoTask = view.findViewById(R.id.campoTestoNuovoTask);
         bottoneAggiungiTask = view.findViewById(R.id.bottoneInserisciNuovoTask);
         bottoneAggiungiTask.setEnabled(false);
+        Applicazione.getInstance().getModello().putBean("campoTestoNuovoTask",campoTestoNuovoTask);
     }
 
     private void inizializzaAzioni() {
@@ -99,4 +101,8 @@ public class ActivityAggiungiNuovoTask extends BottomSheetDialogFragment {
 
         }
     }*/
+
+    public EditText getCampoTestoNuovoTask() {
+        return campoTestoNuovoTask;
+    }
 }
