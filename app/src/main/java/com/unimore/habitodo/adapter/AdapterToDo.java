@@ -111,10 +111,9 @@ public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder> {
         FirebaseUser user = firebaseAuth.getCurrentUser();
         Log.d("logMio","utente del todo : " + user.getEmail());
         firebaseDatabase.getReference().child("users").child(user.getUid()).child("toDoList").child(String.valueOf(toDo.getId())).removeValue();
-        //firebaseDatabase.getReference().child(user.getUid()).child("toDoList").child(String.valueOf(toDo.getId())).setValue("String ");
         Toast.makeText(activityDopoLogIn, "task eliminato", Toast.LENGTH_SHORT).show();
-        notifyItemRemoved(posizione);
-        notifyDataSetChanged();
+        //notifyItemRemoved(posizione);
+        //notifyDataSetChanged();
     }
 
 

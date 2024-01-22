@@ -114,7 +114,22 @@ public class VistaDopoLogIn extends Fragment {
                 int status;
                 String testoToDo;
                 ArrayList<ModelloToDo> listaAppoggio = new ArrayList<>();
+
+                // PROBLEMA : il metodo di scorrere gli id con contatore non funziona in quanto quando si elimina un'elemento in mezzo si ricerca un elemento con id=c e non viene trovato
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+
+                    //versione nuova
+                    Log.d("logOttenimentoDati","ottenuto da db : " + snapshot.getChildren());
+                    Log.d("logOttenimentoDati","ottenuto da db : " + dataSnapshot.child("id"));
+                    id = Integer.parseInt(String.valueOf(dataSnapshot.child("id").getValue()));
+                    //Log.d("logMio","id toDo letto : " + id);
+                    status = Integer.parseInt(String.valueOf(dataSnapshot.child("status").getValue()));
+                    testoToDo = String.valueOf(dataSnapshot.child("testoToDo").getValue());
+                    listaAppoggio.add(new ModelloToDo(id,status,testoToDo));
+
+
+                    // versione vecchia che da problemi con rimozione in testa
+                    /*
                     Log.d("logMio","ottenuto da db : " + snapshot.child(Integer.toString(c)).getValue());
                     id = Integer.parseInt(String.valueOf(snapshot.child(Integer.toString(c)).child("id").getValue()));
                     //Log.d("logMio","id toDo letto : " + id);
@@ -122,6 +137,7 @@ public class VistaDopoLogIn extends Fragment {
                     testoToDo = String.valueOf(snapshot.child(Integer.toString(c)).child("testoToDo").getValue());
                     listaAppoggio.add(new ModelloToDo(id,status,testoToDo));
                     c++;
+                    */
                 }
                 //Log.d("logMio","listaToDo in ValueEventListener : " + listaToDo.toString());
                 listaToDo = listaAppoggio;
@@ -131,6 +147,7 @@ public class VistaDopoLogIn extends Fragment {
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
+
         };
         return valueEventListener;
     }

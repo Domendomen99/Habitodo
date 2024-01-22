@@ -28,10 +28,10 @@ public class ControlloAggiungiNuovoTask {
             Log.d("logMio","Inizio azione AzioneAggiungiNuovoTask");
             String testoNuovoTask = (String) Applicazione.getInstance().getModello().getBean("testoNuovoTask");
             int numeroTask = (int) Applicazione.getInstance().getModello().getBean("numeroTaskAttuale");
-            int idNuovoTask = numeroTask;
+            int idNuovoTask = numeroTask+1;
             int statusNuovoTask = 0;
             Log.d("logMio","AzioneAggiungiNuovoTask : dati nuovo task ottenuti");
-            inserisciSingoloTaskInFirebaseDB(new ModelloToDo(numeroTask,statusNuovoTask,testoNuovoTask));
+            inserisciSingoloTaskInFirebaseDB(new ModelloToDo(idNuovoTask,statusNuovoTask,testoNuovoTask));
             Log.d("logMio","AzioneAggiungiNuovoTask : chiamata a funzone inserisciSingoloTaskInFirebaseDB fatta");
             EditText campoTestoNuovoTask = (EditText) Applicazione.getInstance().getModello().getBean("campoTestoNuovoTask");
             campoTestoNuovoTask.setText("");
