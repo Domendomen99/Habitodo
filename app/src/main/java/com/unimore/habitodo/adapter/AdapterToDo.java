@@ -78,19 +78,44 @@ public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder> {
             checkBoxListaTask = itemView.findViewById(R.id.checkBoxListaTask);
             bottoneEliminaTask = itemView.findViewById(R.id.bottoneEliminaTask);
             bottoneEliminaTask.setOnClickListener(this);
+            checkBoxListaTask.setOnClickListener(listnerCheck);
         }
+
+        View.OnClickListener listnerCheck = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("logMio","check");
+                int status;
+                if(checkBoxListaTask.isChecked()){
+                    status=1;
+                }else {
+                    status = 0;
+                }
+                ActivityDopoLogIn activityDopoLogIn = (ActivityDopoLogIn) Applicazione.getInstance().getCurrentActivity();
+                VistaDopoLogIn vistaDopoLogIn = activityDopoLogIn.getVistaDopoLogIn();
+                AdapterToDo adapterToDo = vistaDopoLogIn.getAdapterToDo();
+                adapterToDo.modificaStatusTask(status,getPosition());
+            }
+        };
 
 
         @Override
         public void onClick(View view) {
-
-                Log.d("logMio","posizione cliccata : " + this.getPosition());
-                Applicazione.getInstance().getModello().putBean("posizione",this.getPosition());
+            Log.d("logMio","posizione cliccata : " + this.getPosition());
+            Applicazione.getInstance().getModello().putBean("posizione",this.getPosition());
             ActivityDopoLogIn activityDopoLogIn = (ActivityDopoLogIn) Applicazione.getInstance().getCurrentActivity();
             VistaDopoLogIn vistaDopoLogIn = activityDopoLogIn.getVistaDopoLogIn();
             AdapterToDo adapterToDo = vistaDopoLogIn.getAdapterToDo();
             adapterToDo.eliminaTask((Integer) Applicazione.getInstance().getModello().getBean("posizione"));
         }
+    }
+
+    private void modificaStatusTask(int status, int position) {
+        FirebaseDatabase firebaseDatabase = (FirebaseDatabase) Applicazione.getInstance().getModello().getBean("firebaseDatabase");
+        FirebaseAuth firebaseAuth = (FirebaseAuth) Applicazione.getInstance().getModello().getBean("firebaseAuth");
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        ModelloToDo toDo = listaToDo.get(position);
+        firebaseDatabase.getReference().child("users").child(user.getUid()).child("toDoList").child(String.valueOf(toDo.getId())).child("status").setValue(status);
     }
 
     public List<ModelloToDo> getListaToDo() {
