@@ -2,6 +2,10 @@ package com.unimore.habitodo;
 
 import android.app.Activity;
 import android.app.Application;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -21,11 +25,27 @@ public class Applicazione extends Application {
         return singleton;
     }
 
+    public static final String CANALE_NOTIFICHE = "notificaTodo";
+
     public void onCreate() {
         super.onCreate();
         Log.d("logMio","Singleton");
         singleton = (Applicazione) getApplicationContext();
         singleton.registerActivityLifecycleCallbacks(new GestoreAttivita());
+        creazioneCanaleNotifiche();
+    }
+
+    private void creazioneCanaleNotifiche() {
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
+            NotificationChannel notificationChannel = new NotificationChannel(
+                    CANALE_NOTIFICHE,
+                    "notificaToDO",
+                    NotificationManager.IMPORTANCE_HIGH
+            );
+            notificationChannel.setDescription("sending todo to be completed");
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(notificationChannel);
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
