@@ -51,6 +51,7 @@ public class VistaDopoLogIn extends Fragment {
         Log.d("logMio","ingresso in onCreateView di VistaDopoLogIn");
         inizializzaVista(vista);
         inizializzaAzioni();
+
         Log.d("logMio","fine inizializzazioni vistaDopoLogIn");
         return vista;
     }
@@ -80,6 +81,7 @@ public class VistaDopoLogIn extends Fragment {
 
         Log.d("logMio","adapterToDo.setListaToDo(listaToDo); andato");
 
+        programmaInvioNotifiche();
 
     }
 
@@ -153,7 +155,6 @@ public class VistaDopoLogIn extends Fragment {
                 Applicazione.getInstance().getModello().putBean("numeroTaskAttuale",listaToDo.size());
                 Applicazione.getInstance().getModello().putBean("listaToDo",listaToDo);
                 Log.d("contenutoModello","MODELLO : " + Applicazione.getInstance().getModello().getMappaBean().keySet());
-                //programmaInvioNotifiche();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
