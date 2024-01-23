@@ -43,13 +43,14 @@ public class VistaDopoLogIn extends Fragment {
     private List<ModelloToDo> listaToDo;
     private FloatingActionButton bottoneAggiungiTask;
 
+    private int lock = 0;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View vista = inflater.inflate(R.layout.vista_dopo_login, container, false);
         Log.d("logMio","ingresso in onCreateView di VistaDopoLogIn");
         inizializzaVista(vista);
         inizializzaAzioni();
-
         Log.d("logMio","fine inizializzazioni vistaDopoLogIn");
         return vista;
     }
@@ -78,6 +79,7 @@ public class VistaDopoLogIn extends Fragment {
         adapterToDo.setListaToDo(listaToDo);
 
         Log.d("logMio","adapterToDo.setListaToDo(listaToDo); andato");
+
 
     }
 
@@ -152,7 +154,10 @@ public class VistaDopoLogIn extends Fragment {
                 Applicazione.getInstance().getModello().putBean("listaToDo",listaToDo);
                 Log.d("contenutoModello","MODELLO : " + Applicazione.getInstance().getModello().getMappaBean().keySet());
 
-                programmaInvioNotifiche();
+                if(lock==0){
+                    programmaInvioNotifiche();
+                    lock++;
+                }
 
             }
             @Override

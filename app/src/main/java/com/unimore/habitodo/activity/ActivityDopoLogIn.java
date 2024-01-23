@@ -1,6 +1,9 @@
 package com.unimore.habitodo.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -31,11 +34,26 @@ import java.util.HashMap;
 
 public class ActivityDopoLogIn extends AppCompatActivity {
 
+    public static final String permesso = Manifest.permission.POST_NOTIFICATIONS;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d("logMio","ingresso di onCreate di ActivityDopoLogIn");
         setContentView(R.layout.activity_dopo_login);
+        controlloPermessi();
+    }
+
+    private void controlloPermessi() {
+        if(this.getApplicationContext().checkCallingOrSelfPermission(permesso)!= PackageManager.PERMISSION_GRANTED){
+            Log.d("logg","permessi non concessi");
+            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
+                int codiceRichiesta=99;
+                this.requestPermissions(new String[]{permesso},codiceRichiesta);
+            }
+        }else{
+            Log.d("logg","ho i permessi per continuare");
+        }
     }
 
     public void mostraMessaggio(){
