@@ -29,19 +29,24 @@ public class ActivityAggiungiNuovoTask extends BottomSheetDialogFragment {
     EditText campoTestoNuovoTask;
     Button bottoneAggiungiTask;
 
+    // crea instanza dell'activity
     public static ActivityAggiungiNuovoTask nuovaInstanza(){
         return new ActivityAggiungiNuovoTask();
     }
 
+    // setting dell'aspetto dell'activity
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(STYLE_NORMAL,R.style.StileAggiungiActivity);
     }
 
+    // dichiarazione layout
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.nuovo_task,container,false);
+
+        // setting del fatto che la activity segue la tastiera nel momento in cui viene mostrata
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         return view;
     }
@@ -52,6 +57,8 @@ public class ActivityAggiungiNuovoTask extends BottomSheetDialogFragment {
         super.onViewCreated(view, savedInstanceState);
         inizializzaVista(view);
         inizializzaAzioni();
+
+        // inutili
         FirebaseDatabase firebaseDatabase = (FirebaseDatabase) Applicazione.getInstance().getModello().getBean("firebaseDatabase");
         FirebaseAuth firebaseAuth = (FirebaseAuth) Applicazione.getInstance().getModello().getBean("firebaseAuth");
     }
@@ -60,6 +67,8 @@ public class ActivityAggiungiNuovoTask extends BottomSheetDialogFragment {
         campoTestoNuovoTask = view.findViewById(R.id.campoTestoNuovoTask);
         bottoneAggiungiTask = view.findViewById(R.id.bottoneInserisciNuovoTask);
         bottoneAggiungiTask.setEnabled(false);
+
+        // ottenere il testo contenuto nel campo
         Applicazione.getInstance().getModello().putBean("campoTestoNuovoTask",campoTestoNuovoTask);
     }
 
@@ -68,18 +77,25 @@ public class ActivityAggiungiNuovoTask extends BottomSheetDialogFragment {
         bottoneAggiungiTask.setOnClickListener(Applicazione.getInstance().getControlloAggiungiNuovoTask().getAzioneAggiungiNuovoTask());
     }
 
+    // vileva modifiche all'interno del campo di testo
     private class ListnerTestoNuovoTask implements TextWatcher {
+
+        // op da fare prima che il testo venga cambiato
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
+        // op quando il testo viene cambiato
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            // se il contenuto è vuoto
             if(charSequence.toString().equals("")){
                 bottoneAggiungiTask.setEnabled(false);
                 bottoneAggiungiTask.setTextColor(Color.GRAY);
             }else{
+                // se viene scritto qualcosa nel campo
                 bottoneAggiungiTask.setEnabled(true);
                 bottoneAggiungiTask.setTextColor(ContextCompat.getColor(getContext(), com.google.android.material.R.color.design_default_color_primary_dark));
+                // inseirmento testo del campo nel modello
                 Applicazione.getInstance().getModello().putBean("testoNuovoTask",campoTestoNuovoTask.getText().toString());
             }
         }

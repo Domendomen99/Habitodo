@@ -33,11 +33,13 @@ public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder> {
         this.activityDopoLogIn = activityDopoLogIn;
     }
 
+    // assegno a lista quella che ricevo tra i parametri e aggiorno la visualizzazione
     public void setListaToDo(List<ModelloToDo> listaToDo) {
         this.listaToDo = listaToDo;
         notifyDataSetChanged();
     }
 
+    // viewHolder mantiene come deve essere visualizzato il contenuto di una card
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -46,6 +48,7 @@ public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder> {
         return new ViewHolder(view);
     }
 
+    // quando devo visualizzare un'elemento in una determinata posizione lo ottengo dalla lista e assegno i dati a viewHolder
     @Override
     public void onBindViewHolder(@NonNull AdapterToDo.ViewHolder holder, int position) {
         Log.d("logMio","listaTodo : " + listaToDo.size() + " : " + listaToDo.toString());
@@ -57,6 +60,7 @@ public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder> {
     }
 
     // funizone che ritorna false se status è 0 o true altrimenti
+    // - se status diverso da 0 ritorna true
     private boolean toBoolean(int status) {
         return status!=0;
     }
@@ -69,9 +73,12 @@ public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder> {
         return listaToDo.size();
     }
 
+    // gestione del ViewHolder
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         CheckBox checkBoxListaTask;
         ImageButton bottoneEliminaTask;
+
+        // inizializzazione dei componenti della vista e azioni
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             checkBoxListaTask = itemView.findViewById(R.id.checkBoxListaTask);
@@ -80,6 +87,7 @@ public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder> {
             checkBoxListaTask.setOnClickListener(listnerCheck);
         }
 
+        // modifica dell'oggetto collegato quando si clicca su checkBox
         View.OnClickListener listnerCheck = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,11 +101,13 @@ public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder> {
                 ActivityDopoLogIn activityDopoLogIn = (ActivityDopoLogIn) Applicazione.getInstance().getCurrentActivity();
                 VistaDopoLogIn vistaDopoLogIn = activityDopoLogIn.getVistaDopoLogIn();
                 AdapterToDo adapterToDo = vistaDopoLogIn.getAdapterToDo();
+
+                // chiamata a metodo esterno che esegue op anche su DB
                 adapterToDo.modificaStatusTask(status,getPosition());
             }
         };
 
-
+        // eliminazione del task quando si preme su icona
         @Override
         public void onClick(View view) {
             Log.d("logMio","posizione cliccata : " + this.getPosition());
@@ -105,6 +115,8 @@ public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder> {
             ActivityDopoLogIn activityDopoLogIn = (ActivityDopoLogIn) Applicazione.getInstance().getCurrentActivity();
             VistaDopoLogIn vistaDopoLogIn = activityDopoLogIn.getVistaDopoLogIn();
             AdapterToDo adapterToDo = vistaDopoLogIn.getAdapterToDo();
+
+            // chiamata a metodo esterno che esegue op anche su DB
             adapterToDo.eliminaTask((Integer) Applicazione.getInstance().getModello().getBean("posizione"));
         }
     }
@@ -117,6 +129,7 @@ public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder> {
         firebaseDatabase.getReference().child("users").child(user.getUid()).child("toDoList").child(String.valueOf(toDo.getId())).child("status").setValue(status);
     }
 
+    // non utilizzato
     public List<ModelloToDo> getListaToDo() {
         Log.d("logMio","getListaToDo");
         if(listaToDo==null){
@@ -134,6 +147,8 @@ public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder> {
         FirebaseAuth firebaseAuth = (FirebaseAuth) Applicazione.getInstance().getModello().getBean("firebaseAuth");
         FirebaseUser user = firebaseAuth.getCurrentUser();
         Log.d("logMio","utente del todo : " + user.getEmail());
+
+        // rimozione del todo da DB
         firebaseDatabase.getReference().child("users").child(user.getUid()).child("toDoList").child(String.valueOf(toDo.getId())).removeValue();
         Toast.makeText(activityDopoLogIn, "task eliminato", Toast.LENGTH_SHORT).show();
         //notifyItemRemoved(posizione);

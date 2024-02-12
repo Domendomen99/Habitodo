@@ -24,6 +24,8 @@ public class ServizioNotifiche extends JobService {
     private NotificationManagerCompat notificationManager;
     private boolean isActive = true;
     private List<ModelloToDo> listaTuttiToDo;
+
+    // lista da mostrare nelle notifiche
     private List<ModelloToDo> listaToDoToDo = new ArrayList<>();
     String testoNotifica = "";
 
@@ -32,6 +34,7 @@ public class ServizioNotifiche extends JobService {
         Log.d("logNot", "onStartJob");
         notificationManager = NotificationManagerCompat.from(this);
 
+        // metodo invio notifica
         inviaNotificaConriepilogoTuttiToDo(jobParameters);
         return true;
     }
@@ -41,9 +44,12 @@ public class ServizioNotifiche extends JobService {
         new Thread(new Runnable() {
             @Override
             public void run() {
+
+                // controllo flag prima di eseguire
                 if (!isActive) {
                     return;
                 }
+
                 Log.d("logNot", "run");
                 listaTuttiToDo = new ArrayList<>();
                 if (Applicazione.getInstance().getModello().getBean("listaToDo") != null) {
@@ -53,6 +59,8 @@ public class ServizioNotifiche extends JobService {
                     Log.d("logNot", "lista to do vuota");
                 }
                 Log.d("logNot", "dimensione lista todo completa : " + listaTuttiToDo.size());
+
+                // creazione di lista di todo da mostrare in notifiche
                 for (ModelloToDo toDo : listaTuttiToDo) {
                     if (toDo.getStatus() == 0) {
                         Log.d("logNot", "todo con status 0 : " + toDo.toString());
@@ -61,6 +69,8 @@ public class ServizioNotifiche extends JobService {
                     }
                 }
                 Log.d("logNot","testoNotifica : " + testoNotifica);
+
+                // creazione della notifica
                 Notification notification = new NotificationCompat.Builder(getApplicationContext(), CANALE_NOTIFICHE)
                         .setSmallIcon(R.drawable.ic_check)
                         .setContentTitle("awaiting completion")
@@ -69,6 +79,7 @@ public class ServizioNotifiche extends JobService {
                         .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                         .build();
 
+                // controllo della concessione dei permessi per inviare notifiche
                 if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                     Log.d("logNot","permesso notifiche MANCANTE");
                     return;

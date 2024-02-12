@@ -8,6 +8,9 @@ import com.unimore.habitodo.activity.ActivityDopoLogIn;
 import com.unimore.habitodo.modello.AdapterToDo;
 import com.unimore.habitodo.vista.VistaDopoLogIn;
 
+// gestione dell'azione di click su cestino nella lista di elementi dei todo
+// NON UTILIZZATO, definizione del metodo in AdapterToDo
+
 public class ControlloAdapterToDo {
 
     private View.OnClickListener azioneEliminaTask = new AzioneEliminaTask();
