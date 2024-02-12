@@ -13,12 +13,14 @@ import com.unimore.habitodo.activity.ActivityLogIn;
 
 public class ControlloLogIn {
 
+    // dichiarazione delle azioni possibili in activity principale
     private View.OnClickListener azionePremiBottoneLogIn = new AzionePremiBottoneLogIn();
 
     public View.OnClickListener getAzionePremiBottoneLogIn() {
         return azionePremiBottoneLogIn;
     }
 
+    // definizione interna di funzionamento azioni
     private class AzionePremiBottoneLogIn implements View.OnClickListener {
         @Override
         public void onClick(View view) {

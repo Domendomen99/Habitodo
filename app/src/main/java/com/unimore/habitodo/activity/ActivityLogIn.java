@@ -39,10 +39,17 @@ import java.util.HashMap;
 
 public class ActivityLogIn extends AppCompatActivity {
 
+    // oggetti utili alla connessione a DB
     FirebaseAuth firebaseAuth;
     FirebaseDatabase firebaseDatabase;
+
+    // oggetto utile a connessione a logIN google
     GoogleSignInClient googleSignInClient;
+
+    // flag che in query di login google assume falore false se utente viene riconosciuto ed è attualmente presente in database mio
     boolean isNonRegistrato = true;
+
+    // non utile
     boolean attendere = true;
 
     @Override
@@ -51,6 +58,8 @@ public class ActivityLogIn extends AppCompatActivity {
         Log.d("logMio","-------------------------------------------");
         setContentView(R.layout.activity_login);
         settingPerAutenticazioneFirebase();
+
+        // controllo l'utente che è attualmente collegato a firebase, se non ne ho nessuno procedo, altrimenti si va avanti con activity
         FirebaseAuth auth = (FirebaseAuth)Applicazione.getInstance().getModello().getBean("firebaseAuth");
         if(auth.getCurrentUser()!=null){
             lanciaIntentActivityDopoLogIn();
@@ -67,6 +76,7 @@ public class ActivityLogIn extends AppCompatActivity {
         Toast.makeText(this, testo, Toast.LENGTH_SHORT).show();
     }
 
+    // operazioni prliminari volte all'uso di firebase e del logIn tramite google
     private void settingPerAutenticazioneFirebase() {
         Log.d("logMio","ingresso in metodo settingPerAutenticazioneFirebase");
         firebaseAuth = FirebaseAuth.getInstance();
@@ -81,6 +91,10 @@ public class ActivityLogIn extends AppCompatActivity {
         googleSignInClient = GoogleSignIn.getClient(this,googleSignInOptions);
         Log.d("logMio","fine di op su googleSignInClient");
         Log.d("logMio","fine metodo autenticazioneFirebase");
+
+        // tutti gli oggetti instanziati vengono inseriti nel modello
+        // - modello : classe che contiene al suo interno una mappa dove si associano oggetti e che è accessibile tramite Applicazione da
+        //   qualsiasi classe
         Applicazione.getInstance().getModello().putBean("firebaseAuth",firebaseAuth);
         Applicazione.getInstance().getModello().putBean("firebaseDatabase",firebaseDatabase);
         Applicazione.getInstance().getModello().putBean("googleSignInClient",googleSignInClient);
@@ -94,7 +108,10 @@ public class ActivityLogIn extends AppCompatActivity {
         Log.d("logMio","googleSignInClient : " + googleSignInClient.toString());
         Log.d("logMio","valore RC_SIGN_IN : " + Costanti.RC_SIGN_IN);
         Log.d("logMio","tutti gli oggetti recuperati da bean");
+
+        // si ottiene activity di log in e la si lancia aspettando un risultato a ritorno
         Intent intent = googleSignInClient.getSignInIntent();
+        // RC_SIGN_IN : codice collegato al risultato dell'activity
         startActivityForResult(intent, Costanti.RC_SIGN_IN);
         Log.d("logMio","FINE : lanciaIntentLogInGoogle");
     }
@@ -104,14 +121,19 @@ public class ActivityLogIn extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d("logMio","risultato lancio activity da ActivityLogIn - codRichiesta :  " + requestCode + " - codRisultato : " + resultCode);
         if(requestCode==Costanti.RC_SIGN_IN){
+
+            // terminato logIn si ottengono i dati risultanti dall esecuzione del logIn
             Log.d("logMio","ricevo qualcosa da lanciaIntentLogInGoogle");
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             Log.d("logMio","Contenuto di data ricevuto da fase di logIn : " + data.getExtras().toString());
+
+            // tentativo di lettura di informaizoni legate a account collegatosi con google
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 Log.d("logMio","ottenimento informazioni account : " + account.getEmail());
-                inserimentoCredenzialiInFirebaseDB(account.getIdToken());
 
+                //si prova a inserire in firebase l'id dell'account che ha eseguito l'accesso
+                inserimentoCredenzialiInFirebaseDB(account.getIdToken());
             }catch (Exception e){
                 Log.d("logMio","eccezione in onActivityResult di ActivityLogIn");
                 Log.d("logMio",e.getMessage() + e.getStackTrace() + e.getCause() + e.getClass() + e.getLocalizedMessage() + e.getSuppressed());
@@ -122,24 +144,31 @@ public class ActivityLogIn extends AppCompatActivity {
 
     private void inserimentoCredenzialiInFirebaseDB(String account) {
         Log.d("logMio","esecuzione inserimentoCredenzialiInFirebaseDB");
+
+        // oggetto che contiene le informazioni dell'account che ha appena fatto logIn
         AuthCredential credenziali = GoogleAuthProvider.getCredential(account,null);
         Log.d("logMio","ottenimento credenziali");
         FirebaseAuth firebaseAuth = (FirebaseAuth) Applicazione.getInstance().getModello().getBean("firebaseAuth");
         FirebaseDatabase firebaseDatabase = (FirebaseDatabase) Applicazione.getInstance().getModello().getBean("firebaseDatabase");
 
+        // inizio operazioni di log in in database e di gestione di utente
+        // - avvio animazione di caricamento
         visualizzaCaricamento();
 
+        // inizio logIn su Firebase passando le credenziali ottenute da Google con relativo callback eseguito alla fine delle operazioni
         Log.d("logMio","oggetti firebaseAuth e firebaseDatabase recuperati da bean");
         firebaseAuth.signInWithCredential(credenziali)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+
+                        // se il task viene completato con successi
                         if(task.isSuccessful()){
                             // chiamata alla funzione che restituisce true se utente è da aggiungere a db
                             Log.d("logControlloUtente","inizio sezione critica");
 
+                            // esecuzione del metodo che gestisce il caso in cui l'utente sia la prima volta che accede a applicazione
                             isUtenteNonRegistrato();
-
                             /*
                             Log.d("logControlloUtente","fine attesa");
 
@@ -162,8 +191,6 @@ public class ActivityLogIn extends AppCompatActivity {
                                 Log.d("logMio","creazione intent per lancio senconda activity");
                                 startActivity(intentLanciaActivityDopoLogIn);
                                 */
-
-
                             }
 
                             // dopo aver inserito utente nuovo se necessario si passa a activity riepilogo task
@@ -177,6 +204,7 @@ public class ActivityLogIn extends AppCompatActivity {
                 });
     }
 
+    // si visualizza una progressbar circolae con animazione
     private void visualizzaCaricamento() {
         // gestione animazione durante caricamento
         VistaLogIn vistaLogIn = this.getVistaLogIn();
@@ -187,7 +215,6 @@ public class ActivityLogIn extends AppCompatActivity {
         progressBar.startAnimation(anim);
     }
 
-    // funzione che restituisce true se utente è da inserire in db
     private void isUtenteNonRegistrato() {
         Log.d("logMio","isUtenteNonRegistrato : ingresso in utenteNonRegistrato");
 
@@ -196,13 +223,14 @@ public class ActivityLogIn extends AppCompatActivity {
         FirebaseDatabase firebaseDatabase = (FirebaseDatabase) Applicazione.getInstance().getModello().getBean("firebaseDatabase");
         FirebaseUser user = firebaseAuth.getCurrentUser();
 
-        // costruisco la query che mi permette di capire se utente è già presente in db
+        // costruisco la query che mi permette di capire se utente è già presente in db posizionandomi dove sono memorizzati tutti gli ID
+        // degli utenti iscritti
         Query queryOttieniUtenteSePresente = firebaseDatabase.getReference().child("users");
 
-        // esecuzione della query in handler
+        // esecuzione della query e aggiunta di listner al termine delle operazioni eseguito un'unica volta
         queryOttieniUtenteSePresente.addListenerForSingleValueEvent(ListnerSingleValueEventOttieniUtente(user));
 
-        // controllo di isNonRegistrato
+        // controllo di isNonRegistrato non più utile
         if(isNonRegistrato){
             Log.d("logMio","isUtenteNonRegistrato : utente non registrato");
         }else{
@@ -214,38 +242,51 @@ public class ActivityLogIn extends AppCompatActivity {
     private ValueEventListener ListnerSingleValueEventOttieniUtente(FirebaseUser user) {
         Log.d("logControlloUtente","ottenimento dati da db");
         Log.d("logMio","ListnerSingleValueEventOttieniUtente : ");
+
+        // eseguito quando ottengo tutte le informazioni degli utenti registrati all'app
         ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String utenteAttuale = user.getUid();
+
+                // scansione di tutti gli utenti ottenuti da query
                 for (DataSnapshot dataSnapshot:snapshot.getChildren()) {
 
                     Log.d("logMio","ListnerSingleValueEventOttieniUtente : dato ottenuto da db " + dataSnapshot.getKey());
                     Log.d("logMio","ListnerSingleValueEventOttieniUtente : dato dell'utente attuale " + utenteAttuale);
 
+                    // se trovo un'utente con uguale UiD di quello attuale
                     if(dataSnapshot.getKey().equals(utenteAttuale)){
 
                         Log.d("logMio","ListnerSingleValueEventOttieniUtente : utente già inserito in db");
                         Log.d("logControlloUtente","valore isNonRegistrato portato a false");
 
+                        // flag non registrto viene impostato a false
                         isNonRegistrato=false;
+
+                        // inutile
                         attendere = false;
                     }else{
                         Log.d("logMio","ListnerSingleValueEventOttieniUtente : utente da inserire in db");
                     }
                 }
 
+                // se l'utente attuale non viene trovato tra quelli già inseriti nel DB Firebase
                 if(isNonRegistrato) {
-
                     Log.d("logControlloUtente", "esecuzione codice all'interno dell'if");
+
                     // operazioni per aggiungere utente a db
+                    // si ottiene un'oggetto utente
                     FirebaseUser user = firebaseAuth.getCurrentUser();
+
+                    // creazione mappa e inserimento dati utente che ha fatto logIn
                     HashMap<String, Object> map = new HashMap<>();
                     map.put("id", user.getUid());
                     map.put("name", user.getDisplayName());
                     map.put("profile", user.getPhotoUrl().toString());
                     Log.d("logMio", "fine inserimento dati in db");
 
+                    // inserimento mappa in users con tutti i valori del nuovo utente
                     firebaseDatabase.getReference().child("users").child(user.getUid()).setValue(map);
                     Log.d("logMio", "ottenuta reference da DB");
                 }
@@ -263,7 +304,7 @@ public class ActivityLogIn extends AppCompatActivity {
     }
 
 
-    // codice copiato
+    // codice copiato da internet
     public class ProgressBarAnimation extends Animation {
         private ProgressBar progressBar;
         private float from;

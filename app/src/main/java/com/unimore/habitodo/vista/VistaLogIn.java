@@ -21,12 +21,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.unimore.habitodo.Applicazione;
 import com.unimore.habitodo.R;
 
+
+// la vista andrà poi visualizzata all'interno di un fragment che è contenuto nell'activity alla quale appartiene
 public class VistaLogIn extends Fragment {
 
     private Button bottoneLogIn;
     private ProgressBar progressBar;
 
 
+    // creazione dei componenti della vista e inizializzazioni
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View vista = inflater.inflate(R.layout.vista_login, container, false);

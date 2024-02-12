@@ -38,11 +38,21 @@ import java.util.List;
 public class VistaDopoLogIn extends Fragment {
 
     private TextView labelNomeUtente;
+
+    // view che permette un'utilizzo ottimale delle risorse mostrando gli stessi elementi ma con valori diversi a seconda di quanto si
+    // scorre la lista
     private RecyclerView recyclerTask;
+
+    // fonrisce dati a recyclerView
     private AdapterToDo adapterToDo;
+
+    // lista di oggetti toDo
     private List<ModelloToDo> listaToDo;
+
+    //bottone che permette l'esecuzione dell'azione aggiungi to do
     private FloatingActionButton bottoneAggiungiTask;
 
+    // flag che controlla quante volte è stato avviato il servizio di notifiche
     private int lock = 0;
 
     @Override
@@ -60,15 +70,18 @@ public class VistaDopoLogIn extends Fragment {
         super.onResume();
         Log.d("logMio","CurrentActivity in VistaDopoLogIn.onResume : " + Applicazione.getInstance().getCurrentActivity().toString());
 
+        // adapter reinizializzato ogni volta che si torna in activity
         this.adapterToDo = new AdapterToDo((ActivityDopoLogIn) Applicazione.getInstance().getCurrentActivity());
         Log.d("logMio","inizializzazioneAdapterToDo andata a buon fine");
 
+        // setting dell adapter
         recyclerTask.setAdapter(adapterToDo);
         Log.d("logMio","setAdapter andata a buon fine");
 
         //inserisciSingoloTaskInFirebaseDB(new ModelloToDo(0,0,"prova"));
         //inserisciSingoloTaskInFirebaseDB(new ModelloToDo(1,1,"prova1"));
 
+        // si ottiene una lista di todo da mostrare
         ottieniListaToDoDaFirebaseDB();
 
         // codice per capire come funziona inserimento utente
@@ -76,15 +89,13 @@ public class VistaDopoLogIn extends Fragment {
         Log.d("logMio","listaToDo inizializzata per bene");
         //Log.d("logMio","listaToDo in OnResume : " + listaToDo.toString());
 
+        // setting lista todo
         adapterToDo.setListaToDo(listaToDo);
-
         Log.d("logMio","adapterToDo.setListaToDo(listaToDo); andato");
-
-
     }
 
     // codice utile in debugging
-    // RISULTATO : ogni volta che accedo a app viene sovrascritto utente attuale e tutti i dati collegati vengono eliminati
+    // PROBLEMA : ogni volta che accedo a app viene sovrascritto utente attuale e tutti i dati collegati vengono eliminati
     // SOLUZIONE : fare controllo durante login e evitare di reinserire utente quando già presente
     private void provaPutUtente() {
         FirebaseAuth firebaseAuth = (FirebaseAuth) Applicazione.getInstance().getModello().getBean("firebaseAuth");
@@ -99,14 +110,22 @@ public class VistaDopoLogIn extends Fragment {
 
 
     private void ottieniListaToDoDaFirebaseDB() {
+
+        // ottenimento oggetti da modello
         FirebaseAuth firebaseAuth = (FirebaseAuth) Applicazione.getInstance().getModello().getBean("firebaseAuth");
         FirebaseDatabase firebaseDatabase = (FirebaseDatabase) Applicazione.getInstance().getModello().getBean("firebaseDatabase");
+
+        // ottenimento utente corrente
         FirebaseUser user = firebaseAuth.getCurrentUser();
         Log.d("logMio","Path utente corrente : " + firebaseDatabase.getReference().child("users").child(user.getUid()));
         Log.d("logMio","Path listaToDo : " + firebaseDatabase.getReference().child("users").child(user.getUid()).child("toDoList"));
+
+        // esecuzione query
         Query queryOttieniListaToDoUtente = firebaseDatabase.getReference().child("users").child(user.getUid()).child("toDoList");
         Log.d("logMio","costruzione query andata a buon fine");
         Log.d("logMio","ESECUZIONE QUERY richiesta dati");
+
+        // aggiunta listener a query che esegue ogni volta che vengono rilevate modifiche ai valori
         queryOttieniListaToDoUtente.addValueEventListener(ValueEventListenerOttieniTask());
         Log.d("logMio","QUERY andata a buon fine");
     }
@@ -122,18 +141,23 @@ public class VistaDopoLogIn extends Fragment {
                 ArrayList<ModelloToDo> listaAppoggio = new ArrayList<>();
 
                 // PROBLEMA : il metodo di scorrere gli id con contatore non funziona in quanto quando si elimina un'elemento in mezzo si ricerca un elemento con id=c e non viene trovato
+
+                // scorrimento risultati ottenuti : tutti i todo dell'utente corrente
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
 
-                    //versione nuova
+                    //versione nuova - memorizzazione dei dati dei todo
                     Log.d("logOttenimentoDati","ottenuto da db : " + snapshot.getChildren());
                     Log.d("logOttenimentoDati","ottenuto da db : " + dataSnapshot.child("id"));
                     id = Integer.parseInt(String.valueOf(dataSnapshot.child("id").getValue()));
                     //Log.d("logMio","id toDo letto : " + id);
                     status = Integer.parseInt(String.valueOf(dataSnapshot.child("status").getValue()));
                     testoToDo = String.valueOf(dataSnapshot.child("testoToDo").getValue());
-                    listaAppoggio.add(new ModelloToDo(id,status,testoToDo));
-                    Applicazione.getInstance().getModello().putBean("ultimoID",id);
 
+                    // inserimento todo letto in lista
+                    listaAppoggio.add(new ModelloToDo(id,status,testoToDo));
+
+                    // memorizzazione dell'id dell'ultimo todo memorizzato
+                    Applicazione.getInstance().getModello().putBean("ultimoID",id);
 
                     // versione vecchia che da problemi con rimozione in testa
                     /*
@@ -147,13 +171,18 @@ public class VistaDopoLogIn extends Fragment {
                     */
                 }
                 //Log.d("logMio","listaToDo in ValueEventListener : " + listaToDo.toString());
+
+                // a fine esecuzione query si assegnano i todo letti a lista da mostrare nell'adapter
                 listaToDo = listaAppoggio;
                 adapterToDo.setListaToDo(listaToDo);
                 Log.d("logMio","dimensione lista TODO : " + listaToDo.size());
+
+                // si memorizza in modello sia la lista che il numero di elementi totali
                 Applicazione.getInstance().getModello().putBean("numeroTaskAttuale",listaToDo.size());
                 Applicazione.getInstance().getModello().putBean("listaToDo",listaToDo);
                 Log.d("contenutoModello","MODELLO : " + Applicazione.getInstance().getModello().getMappaBean().keySet());
 
+                // la prima volta che si esegue questo si avvia il servizio di notifiche
                 if(lock==0){
                     programmaInvioNotifiche();
                     lock++;
@@ -184,6 +213,7 @@ public class VistaDopoLogIn extends Fragment {
         firebaseDatabase.getReference().child("users").child(firebaseAuth.getCurrentUser().getUid()).child("toDoList").child(idToDo).setValue(toDoDiProva);
     }
 
+    // collegamento elementi vista con oggetti
     private void inizializzaVista(View vista) {
         Log.d("logMio","CurrentActivity in VistaDopoLogIn.inizializzaVista : " + Applicazione.getInstance().toString());
         this.labelNomeUtente = vista.findViewById(R.id.labelNomeUtente);
@@ -207,14 +237,21 @@ public class VistaDopoLogIn extends Fragment {
 
     public void programmaInvioNotifiche(){
         ActivityDopoLogIn activityDopoLogIn = (ActivityDopoLogIn) Applicazione.getInstance().getCurrentActivity();
+
+        // informazioni necessarie allo scheduler specificando cosa sta per essere eseguito
         ComponentName componentName = new ComponentName(activityDopoLogIn.getApplicationContext(),ServizioNotifiche.class);
+
+        // dichiarazione informazioni del job da schedulare ogni 15 minuti, intervallo minimo concesso da android
         JobInfo jobInfo = new JobInfo.Builder(123,componentName)
                 .setPersisted(true)
                 .setPeriodic(15*60*1000)
                 .build();
 
+        // si ottiene lo scheduler e si avvia il job
         JobScheduler scheduler = (JobScheduler) activityDopoLogIn.getSystemService(JOB_SCHEDULER_SERVICE);
         int resultCode = scheduler.schedule(jobInfo);
+
+        // controllo se andato tutto a buon fine
         if(resultCode==JobScheduler.RESULT_SUCCESS){
             Log.d("logNot","job schedulato con successo");
         }else{
@@ -222,6 +259,7 @@ public class VistaDopoLogIn extends Fragment {
         }
     }
 
+    // non utilizzato
     public void cancellaInvioNotidiche(){
         ActivityDopoLogIn activityDopoLogIn = (ActivityDopoLogIn) Applicazione.getInstance().getCurrentActivity();
         JobScheduler scheduler = (JobScheduler) activityDopoLogIn.getSystemService(JOB_SCHEDULER_SERVICE);

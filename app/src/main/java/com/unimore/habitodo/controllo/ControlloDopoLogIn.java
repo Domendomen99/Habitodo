@@ -10,6 +10,8 @@ import com.unimore.habitodo.activity.ActivityLogIn;
 
 public class ControlloDopoLogIn {
 
+    // classe controllo semplice che lancia una activity come un dialog per eseguire aggiunta di task alla lista
+
     private View.OnClickListener azioneMostraActivityAggiungiNuovoTask = new AzioneMostraNuovoTask();
 
     public View.OnClickListener getAzioneMostraActivityAggiungiNuovoTask() {

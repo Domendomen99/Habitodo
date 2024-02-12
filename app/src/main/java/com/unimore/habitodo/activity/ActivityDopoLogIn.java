@@ -34,6 +34,7 @@ import java.util.HashMap;
 
 public class ActivityDopoLogIn extends AppCompatActivity {
 
+    // permesso di invio notifiche
     public static final String permesso = Manifest.permission.POST_NOTIFICATIONS;
 
     @Override
@@ -41,9 +42,12 @@ public class ActivityDopoLogIn extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Log.d("logMio","ingresso di onCreate di ActivityDopoLogIn");
         setContentView(R.layout.activity_dopo_login);
+
+        // obbligatorio
         controlloPermessi();
     }
 
+    // richiede di accettare il fatto che si vogliano ricevere notifiche da parte dell'applicazione
     private void controlloPermessi() {
         if(this.getApplicationContext().checkCallingOrSelfPermission(permesso)!= PackageManager.PERMISSION_GRANTED){
             Log.d("logg","permessi non concessi");

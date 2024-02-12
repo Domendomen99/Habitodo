@@ -19,8 +19,12 @@ import com.unimore.habitodo.modello.Modello;
 
 public class Applicazione extends Application {
 
+    // singleton - oggetto di cui si crea una unica istanza in modo da poter condividere dati in più parti del programma
     private static Applicazione singleton;
 
+    // metodo che ci permette di richiamare il singletone e da qui spostarci al suo interno per ottenere informazioni
+    // - utilizzo più frequente è quello di ottenere da d'ovunque ci si trovi il riferimento alla current activity in
+    //   esecuzione che viene memorizzato ogni volta che ci si sposta su una nuova activity
     public static Applicazione getInstance() {
         return singleton;
     }
@@ -30,11 +34,14 @@ public class Applicazione extends Application {
     public void onCreate() {
         super.onCreate();
         Log.d("logMio","Singleton");
+
+        // inizializzazione di Applicazione
         singleton = (Applicazione) getApplicationContext();
         singleton.registerActivityLifecycleCallbacks(new GestoreAttivita());
         creazioneCanaleNotifiche();
     }
 
+    // operazione necessaria al lancio dell'app in modo che siano dichiarate tutte le notifiche che può lanciare
     private void creazioneCanaleNotifiche() {
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
             NotificationChannel notificationChannel = new NotificationChannel(
@@ -50,11 +57,14 @@ public class Applicazione extends Application {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
+    // Dichiarazione dei componenti che vanno a formare l'applicazione
     public static Applicazione getSingleton() {
         return singleton;
     }
     private Activity currentActivity = null;
     private Modello modello = new Modello();
+
+    // Refuso della fase di progettazione
     private ControlloProva1 controlloProva1 = new ControlloProva1();
     private ControlloLogIn controlloLogIn = new ControlloLogIn();
     private ControlloDopoLogIn controlloDopoLogIn = new ControlloDopoLogIn();
@@ -64,7 +74,7 @@ public class Applicazione extends Application {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+    // metodi di get dei componenti in modo che siano ottnibili da ovunque ci si trovi
     public ServizioNotifiche getServizioNotifiche() {return servizioNotifiche;}
     public ControlloAdapterToDo getControlloAdapterToDo() {
         return controlloAdapterToDo;
